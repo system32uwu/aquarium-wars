@@ -1,0 +1,7 @@
+{
+  "name": "@aquarium-wars/whale",
+  "version": "1.0.0",
+  "description": "database, storage and interfaces for aquarium wars",
+  "main": "src/index.ts",
+  "author": "Mateo Carriqui <mateocarriqui7@gmail.com>"
+}

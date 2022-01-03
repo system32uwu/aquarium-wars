@@ -1,0 +1,7 @@
+{
+  "name": "@aquarium-wars/shark",
+  "version": "1.0.0",
+  "description": "nft generator for aquarium wars",
+  "main": "src/index.ts",
+  "author": "Mateo Carriqui <mateocarriqui7@gmail.com>"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "aquarium-wars",
+  "author": "Mateo Carriqui <mateocarriqui7@gmail.com>",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "salmon": "yarn workspace @aquarium-wars/salmon",
+    "tuna": "yarn workspace @aquarium-wars/tuna",
+    "whale": "yarn workspace @aquarium-wars/whale",
+    "anchovy": "yarn workspace @aquarium-wars/shark"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
