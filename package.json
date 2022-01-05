@@ -9,7 +9,7 @@
     "salmon": "yarn workspace @aquarium-wars/salmon",
     "tuna": "yarn workspace @aquarium-wars/tuna",
     "whale": "yarn workspace @aquarium-wars/whale",
-    "anchovy": "yarn workspace @aquarium-wars/shark"
+    "shark": "yarn workspace @aquarium-wars/shark"
   },
   "devDependencies": {
     "lerna": "^4.0.0"
