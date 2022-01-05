@@ -1,20 +1,22 @@
+require('dotenv').config()
+
 const { readFileSync, writeFileSync } = require("fs");
 const {
   DEFAULT_METADATA_PATH,
   IMAGES_BASE_URI,
   TOTAL_TOKENS,
-} = require("../config");
+} = require(`${__dirname}/../collections/${process.env.BUILD_COLLECTION}/config`);
 
 /** UPDATE BASE URI SCRIPT **/
 (() => {
-  for (let tokenId = 0; tokenId < TOTAL_TOKENS; tokenId += 1) {
-    const data = readFileSync(`${DEFAULT_METADATA_PATH}/${tokenId}`);
+  for (let tokenId = 1; tokenId < TOTAL_TOKENS; tokenId++) {
+    const data = readFileSync(`${DEFAULT_METADATA_PATH}/${tokenId}.json`);
     const json = {
       ...JSON.parse(data),
       image: `${IMAGES_BASE_URI}/${tokenId}.png`,
     };
     writeFileSync(
-      `${DEFAULT_METADATA_PATH}/${tokenId}`,
+      `${DEFAULT_METADATA_PATH}/${tokenId}.json`,
       JSON.stringify(json, null, 2)
     );
   }
