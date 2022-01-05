@@ -28,7 +28,7 @@ const usedTokenIds = new Set();
   const tokenIds = Array.from(Array(GIF_FRAMES)).map((_) => {
     let tokenId;
     do {
-      tokenId = Math.floor(Math.random() * TOTAL_TOKENS);
+      tokenId = Math.floor(Math.random() * TOTAL_TOKENS) + 1;
     } while (usedTokenIds.has(tokenId));
     usedTokenIds.add(tokenId);
     return tokenId;
