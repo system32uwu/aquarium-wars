@@ -49,4 +49,7 @@ To view a specific file, head over to ${gateway}/${cid}/file.png where file is t
     message(dirCID),
     "utf-8"
   );
+  
+  console.log(fs.readFileSync(`${OUTPUT_PATH}/../deploy.md`, {encoding: 'utf-8'}))
+  console.log(`Successfully deployed! Read ${OUTPUT_PATH}/deploy.md to read more`)
 })();
