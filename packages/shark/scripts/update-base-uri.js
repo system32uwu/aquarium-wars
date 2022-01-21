@@ -1,26 +1,29 @@
 require('dotenv').config()
 
 const { readFileSync, writeFileSync } = require("fs");
+const { configPath } = require('../imports');
 const {
-  DEFAULT_METADATA_PATH,
-  IMAGES_BASE_URI,
+  OUTPUT_PATH,
   TOTAL_TOKENS,
-} = require(`${__dirname}/../collections/${process.env.BUILD_COLLECTION}/config`);
+} = require(configPath);
 
-/** UPDATE BASE URI SCRIPT **/
-(() => {
+exports.update = (URI) => {
+  console.log(
+    `new baseURI: ${URI}`
+  );
+
   for (let tokenId = 1; tokenId < TOTAL_TOKENS; tokenId++) {
-    const data = readFileSync(`${DEFAULT_METADATA_PATH}/${tokenId}.json`);
+    const data = readFileSync(`${OUTPUT_PATH}/${tokenId}`);
     const json = {
       ...JSON.parse(data),
-      image: `${IMAGES_BASE_URI}/${tokenId}.png`,
+      image: `${URI}/${tokenId}.png`,
     };
     writeFileSync(
-      `${DEFAULT_METADATA_PATH}/${tokenId}.json`,
+      `${OUTPUT_PATH}/${tokenId}`,
       JSON.stringify(json, null, 2)
     );
   }
   console.log(
-    `SUCCESS! Images base URI in metadata files updated to: ${DEFAULT_METADATA_PATH}`
+    `SUCCESS! Images base URI in metadata files updated to: ${OUTPUT_PATH}`
   );
-})();
+}

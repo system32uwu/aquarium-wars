@@ -1,16 +1,15 @@
-const config = {}
+const config = {
+  OUTPUT_PATH: `${__dirname}/output/${process.env.BUILD_COLLECTION}`,
 
-config.DEFAULT_IMAGES_PATH = `${__dirname}/output/images`
-config.DEFAULT_METADATA_PATH = `${__dirname}/output/metadata`
-
-// UPDATE THESE CONSTANTS BELOW WITH YOUR VALUES
-config.GIF_FRAMES = 10
-config.IMAGES_BASE_URI = 'ipfs://'
-config.IMAGES_HEIGHT = 1080
-config.IMAGES_WIDTH = 1080
-config.TOKEN_NAME_PREFIX = 'Mutant Anchovy #'
-config.TOKEN_DESCRIPTION = 'A Mutant Anchovy that belongs to the Aquarium.'
-config.TOTAL_TOKENS = 10000
+  // UPDATE THESE CONSTANTS BELOW WITH YOUR VALUES
+  GIF_FRAMES: 10,
+  IMAGES_BASE_URI: 'http://',
+  IMAGES_HEIGHT: 1080,
+  IMAGES_WIDTH: 1080,
+  TOKEN_NAME_PREFIX: 'Mutant Anchovy #',
+  TOKEN_DESCRIPTION: 'A Mutant Anchovy that belongs to the Aquarium.',
+  TOTAL_TOKENS: 100
+}
 
 // UPDATE THIS ARRAY BELOW WITH YOUR TRAITS LIST
 config.ORDERED_TRAITS_LIST = [

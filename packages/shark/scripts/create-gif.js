@@ -3,13 +3,14 @@ require('dotenv').config()
 const { writeFileSync } = require("fs");
 const { createCanvas, loadImage } = require("canvas");
 const GifEncoder = require("gif-encoder-2");
+const { configPath } = require('../imports');
 const {
   DEFAULT_IMAGES_PATH,
   GIF_FRAMES,
   IMAGES_HEIGHT,
   IMAGES_WIDTH,
   TOTAL_TOKENS,
-} = require(`${__dirname}/../collections/${process.env.BUILD_COLLECTION}/config`);
+} = require(configPath);
 
 const canvas = createCanvas(IMAGES_WIDTH, IMAGES_HEIGHT);
 const ctx = canvas.getContext("2d", { alpha: false });
