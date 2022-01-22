@@ -10,6 +10,8 @@ const {
   GATEWAY
 } = makeConfig(BUILD_COLLECTION);
 
+const _GATEWAY = GATEWAY || "https://ipfs.io/ipfs";
+
 const fs = require("fs");
 const { create, globSource } = require("ipfs-http-client");
 
@@ -20,15 +22,15 @@ const deployResult = (imgCID, metaCID) => `
 
 ## Images
 
-To view the image files uploaded, head over to ${GATEWAY}/${imgCID}
+To view the image files uploaded, head over to ${_GATEWAY}/${imgCID}
 
-To view a specific image file, head over to ${GATEWAY}/${imgCID}/file.png where file is the ID of the NFT.
+To view a specific image file, head over to ${_GATEWAY}/${imgCID}/{ID}.png where ID is the ID of the NFT.
 
 ## Metadata
 
-To view the metadata files uploaded, head over to ${GATEWAY}/${metaCID}
+To view the metadata files uploaded, head over to ${_GATEWAY}/${metaCID}
 
-To view a specific metadata file, head over to ${GATEWAY}/${metaCID}/file where file is the ID of the NFT.
+To view a specific metadata file, head over to ${_GATEWAY}/${metaCID}/ID where ID is the ID of the NFT.
 
 `;
 
@@ -61,7 +63,7 @@ To view a specific metadata file, head over to ${GATEWAY}/${metaCID}/file where 
 
     const addedMetaFiles = [];
 
-    await update(`${GATEWAY}/${imagesDirCID}`); // update URI of metadata
+    await update(`${_GATEWAY}/${imagesDirCID}`); // update URI of metadata
 
     // upload metadata with updated image URI
     for await (const file of ipfs.addAll(globSource(OUTPUT_PATH_META, "**/*"), {

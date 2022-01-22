@@ -35,7 +35,7 @@ const genConfig = `const makeConfig = (BUILD_COLLECTION) => {
     IMAGES_HEIGHT: 1080,
     IMAGES_WIDTH: 1080,
   
-    GATEWAY: "http://localhost:8080/ipfs",
+    GATEWAY: "http://localhost:8080/ipfs", // leave blank if you don't have a dedicated gateway
   
     // Set these two if you want them to be uploaded to a centralized service (not IPFS)
     IMAGES_BASE_URI: "", // https://myserver.com/collection1
