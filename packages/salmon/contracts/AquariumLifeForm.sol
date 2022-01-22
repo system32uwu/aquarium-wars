@@ -55,7 +55,7 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
         require(!paused, "Sale paused");
         require(_amount <= maxMint, "Max Mint amount exceeded.");
         require(
-            _supply + _amount =< maxSupply - reserved,
+            _supply + _amount <= maxSupply - reserved,
             "Exceeds maximum AQLF supply"
         );
         require(msg.value < _total, "Incorrect payment sent");
