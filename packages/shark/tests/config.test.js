@@ -1,23 +1,32 @@
-require('dotenv').config()
-
-const { expect } = require("chai");
-const { configPath } = require('../imports');
+const BUILD_COLLECTION = process.argv[2] || undefined;
+const { configPath } = require("../imports");
+const makeConfig = require(configPath(BUILD_COLLECTION));
 const {
-  OUTPUT_PATH,
   IMAGES_BASE_URI,
+  IMAGES_HEIGHT,
+  IMAGES_WIDTH,
   TOKEN_NAME_PREFIX,
   TOKEN_DESCRIPTION,
   TOTAL_TOKENS,
   ORDERED_TRAITS_LIST,
-} = require(configPath);
+  OUTPUT_PATH,
+  OUTPUT_PATH_META,
+  OUTPUT_PATH_IMG,
+} = makeConfig(BUILD_COLLECTION);
 
-describe("Constants validation:", () => {
+const { expect } = require("chai");
+
+describe("Base Configuration validation:", () => {
   it("OUTPUT_PATH should be a string", () => {
     expect(OUTPUT_PATH).to.be.a("string");
   });
 
-  it("OUTPUT_PATH should be a string", () => {
-    expect(OUTPUT_PATH).to.be.a("string");
+  it("OUTPUT_PATH_IMG should be a string", () => {
+    expect(OUTPUT_PATH_IMG).to.be.a("string");
+  });
+
+  it("OUTPUT_PATH_META should be a string", () => {
+    expect(OUTPUT_PATH_META).to.be.a("string");
   });
 
   it("IMAGES_BASE_URI should be a valid URI string", () => {
@@ -32,10 +41,9 @@ describe("Constants validation:", () => {
     // );
 
     const testHttp = regexHttp.test(IMAGES_BASE_URI);
-    const testIpfs = false //regexIpfs.test(IMAGES_BASE_URI);
+    const testIpfs = false; //regexIpfs.test(IMAGES_BASE_URI);
 
-    expect(testHttp || testIpfs).to.be.true;
-
+    expect(testHttp || testIpfs || !IMAGES_BASE_URI).to.be.true; // can be http, ipfs or blank
   });
 
   it("TOKEN_NAME_PREFIX should be a string", () => {
@@ -51,6 +59,16 @@ describe("Constants validation:", () => {
   it("TOTAL_TOKENS should be an integer of at least 1", () => {
     expect(TOTAL_TOKENS % 1).to.equal(0);
     expect(TOTAL_TOKENS).to.be.a("number").of.at.least(1);
+  });
+
+  it("IMAGES_WIDTH should be an integer of at least 1", () => {
+    expect(IMAGES_WIDTH % 1).to.equal(0);
+    expect(IMAGES_WIDTH).to.be.a("number").of.at.least(1);
+  });
+
+  it("IMAGES_HEIGHT should be an integer of at least 1", () => {
+    expect(IMAGES_HEIGHT % 1).to.equal(0);
+    expect(IMAGES_HEIGHT).to.be.a("number").of.at.least(1);
   });
 });
 
@@ -73,7 +91,9 @@ describe("Traits list validation:", () => {
   });
 
   it("each trait's type (if present) should be a string", () => {
-    ORDERED_TRAITS_LIST.forEach(({ type }) => type && expect(type).to.be.a("string"));
+    ORDERED_TRAITS_LIST.forEach(
+      ({ type }) => type && expect(type).to.be.a("string")
+    );
   });
 
   it("each trait's type string should be unique", () => {
@@ -87,7 +107,9 @@ describe("Traits list validation:", () => {
   });
 
   it("each trait should include an options array", () => {
-    ORDERED_TRAITS_LIST.forEach(({ options }) => expect(options).to.be.an("array"));
+    ORDERED_TRAITS_LIST.forEach(({ options }) =>
+      expect(options).to.be.an("array")
+    );
   });
 
   it("each option should include a weight integer of at least 1", () => {

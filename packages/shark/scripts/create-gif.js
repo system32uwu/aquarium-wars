@@ -1,23 +1,24 @@
-require('dotenv').config()
+const BUILD_COLLECTION = process.argv[2] || undefined;
+const { configPath } = require("../imports");
+const makeConfig = require(configPath(BUILD_COLLECTION));
+const {
+  IMAGES_HEIGHT,
+  IMAGES_WIDTH,
+  TOTAL_TOKENS,
+  OUTPUT_PATH_IMG,
+  GIF_FRAMES
+} = makeConfig(BUILD_COLLECTION);
+
 
 const { writeFileSync } = require("fs");
 const { createCanvas, loadImage } = require("canvas");
 const GifEncoder = require("gif-encoder-2");
-const { configPath } = require('../imports');
-const {
-  DEFAULT_IMAGES_PATH,
-  GIF_FRAMES,
-  IMAGES_HEIGHT,
-  IMAGES_WIDTH,
-  TOTAL_TOKENS,
-} = require(configPath);
 
 const canvas = createCanvas(IMAGES_WIDTH, IMAGES_HEIGHT);
 const ctx = canvas.getContext("2d", { alpha: false });
 
 const usedTokenIds = new Set();
 
-/** CREATE GIF SCRIPT **/
 (async () => {
   const gifEncoder = new GifEncoder(
     IMAGES_WIDTH,
@@ -40,7 +41,7 @@ const usedTokenIds = new Set();
   gifEncoder.start();
 
   for (let tokenId of tokenIds) {
-    const frame = await loadImage(`${DEFAULT_IMAGES_PATH}/${tokenId}.png`);
+    const frame = await loadImage(`${OUTPUT_PATH_IMG}/${tokenId}.png`);
     ctx.drawImage(frame, 0, 0);
     gifEncoder.addFrame(ctx);
   }
@@ -48,9 +49,9 @@ const usedTokenIds = new Set();
   gifEncoder.finish();
 
   const buffer = gifEncoder.out.getData();
-  writeFileSync(`${DEFAULT_IMAGES_PATH}/../preview.gif`, buffer);
+  writeFileSync(`${OUTPUT_PATH_IMG}/../preview.gif`, buffer);
 
   console.log(
-    `Created GIF at ${DEFAULT_IMAGES_PATH}/../preview.gif width tokenIds: ${tokenIds.join(" ")}`
+    `Created GIF at ${OUTPUT_PATH_IMG}/../preview.gif width tokenIds: ${tokenIds.join(" ")}`
   );
 })();

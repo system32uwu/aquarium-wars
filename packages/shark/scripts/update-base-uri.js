@@ -1,29 +1,26 @@
-require('dotenv').config()
+const BUILD_COLLECTION = process.argv[2] || undefined;
+const { configPath } = require("../imports");
+const makeConfig = require(configPath(BUILD_COLLECTION));
+const { OUTPUT_PATH_META, TOTAL_TOKENS } = makeConfig(BUILD_COLLECTION);
 
-const { readFileSync, writeFileSync } = require("fs");
-const { configPath } = require('../imports');
-const {
-  OUTPUT_PATH,
-  TOTAL_TOKENS,
-} = require(configPath);
+const { readFile, writeFile } = require("fs").promises;
 
-exports.update = (URI) => {
-  console.log(
-    `new baseURI: ${URI}`
-  );
+exports.update = async (URI) => {
+  console.log(`new baseURI: ${URI}`);
 
-  for (let tokenId = 1; tokenId < TOTAL_TOKENS; tokenId++) {
-    const data = readFileSync(`${OUTPUT_PATH}/${tokenId}`);
+  for (let tokenId = 1; tokenId <= TOTAL_TOKENS; tokenId++) {
+    const data = await readFile(`${OUTPUT_PATH_META}/${tokenId}`);
     const json = {
       ...JSON.parse(data),
       image: `${URI}/${tokenId}.png`,
     };
-    writeFileSync(
-      `${OUTPUT_PATH}/${tokenId}`,
+    await writeFile(
+      `${OUTPUT_PATH_META}/${tokenId}`,
       JSON.stringify(json, null, 2)
     );
   }
+
   console.log(
-    `SUCCESS! Images base URI in metadata files updated to: ${OUTPUT_PATH}`
+    `SUCCESS! Images base URI in metadata files updated to: ${OUTPUT_PATH_META}`
   );
-}
+};

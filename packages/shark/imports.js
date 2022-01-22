@@ -1,8 +1,22 @@
-require('dotenv').config()
+const fs = require("fs");
 
-const collectionPath = `${__dirname}/collections/${process.env.BUILD_COLLECTION}`
+const collectionPath = (BUILD_COLLECTION) => {
+  require("dotenv").config();
+  let _dir;
 
-const configPath = `${collectionPath}/config`
+  if (fs.existsSync(`${__dirname}/collections/${_dir}/${BUILD_COLLECTION}`)) {
+    _dir = BUILD_COLLECTION;
+  } else {
+    _dir = process.env.BUILD_COLLECTION;
+  }
 
-exports.collectionPath = collectionPath
-exports.configPath = configPath
+  return `${__dirname}/collections/${_dir}`;
+};
+
+const configPath = (BUILD_COLLECTION) => {
+  return `${collectionPath(BUILD_COLLECTION)}/config`;
+};
+
+exports.collectionPath = collectionPath;
+
+exports.configPath = configPath;

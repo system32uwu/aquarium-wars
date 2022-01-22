@@ -1,10 +1,6 @@
-require("dotenv").config();
-
-const crypto = require("crypto");
-const { createCanvas, loadImage } = require("canvas");
-const { writeFile, rm, mkdir } = require("fs").promises;
+const BUILD_COLLECTION = process.argv[2] || undefined;
 const { configPath } = require("./imports");
-
+const makeConfig = require(configPath(BUILD_COLLECTION));
 const {
   IMAGES_BASE_URI,
   IMAGES_HEIGHT,
@@ -13,8 +9,14 @@ const {
   TOKEN_DESCRIPTION,
   TOTAL_TOKENS,
   ORDERED_TRAITS_LIST,
-  OUTPUT_PATH
-} = require(configPath);
+  OUTPUT_PATH,
+  OUTPUT_PATH_META,
+  OUTPUT_PATH_IMG,
+} = makeConfig(BUILD_COLLECTION);
+
+const crypto = require("crypto");
+const { createCanvas, loadImage } = require("canvas");
+const { writeFile, rm, mkdir } = require("fs").promises;
 
 const canvas = createCanvas(IMAGES_WIDTH, IMAGES_HEIGHT);
 const ctx = canvas.getContext("2d", { alpha: false });
@@ -122,7 +124,7 @@ const generateTokenMetadata = async ({ tokenId, traits }) => {
     })),
   };
   await writeFile(
-    `${OUTPUT_PATH}/${tokenId}`,
+    `${OUTPUT_PATH_META}/${tokenId}`,
     JSON.stringify(metadata, null, 2)
   );
 };
@@ -135,7 +137,7 @@ const generateTokenImage = async ({ tokenId, traits }) => {
     }
   }
   await writeFile(
-    `${OUTPUT_PATH}/${tokenId}.png`,
+    `${OUTPUT_PATH_IMG}/${tokenId}.png`,
     canvas.toBuffer("image/png")
   );
 };
@@ -175,13 +177,14 @@ const printStats = (tokens) => {
 
 /** MAIN SCRIPT **/
 (async () => {
-
   try {
     await rm(OUTPUT_PATH, { recursive: true });
   } catch {
     console.log("creating output directory...");
   } finally {
     await mkdir(OUTPUT_PATH, { recursive: true });
+    await mkdir(OUTPUT_PATH_IMG, { recursive: true });
+    await mkdir(OUTPUT_PATH_META, { recursive: true });
   }
 
   try {

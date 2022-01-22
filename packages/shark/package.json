@@ -4,11 +4,13 @@
   "description": "Generates images and metadata for multiple collection of NFTs.",
   "main": "index.js",
   "scripts": {
-    "build": "node index.js",
-    "deploy": "yarn build && node scripts/deploy.js",
+    "create-collection": "node scripts/create-collection.js",
     "test": "mocha tests/*.test.js",
+    "build": "node index.js",
+    "deploy": "node scripts/deploy.js",
     "create-gif": "node scripts/create-gif.js",
-    "calculate-hash": "node scripts/calculate-hash.js"
+    "calculate-hash": "node scripts/calculate-hash.js",
+    "bite": "yarn test && yarn build $@ && yarn deploy $@ && yarn create-gif && yarn calculate-hash"
   },
   "author": "Mateo Carriquí",
   "license": "MIT",
