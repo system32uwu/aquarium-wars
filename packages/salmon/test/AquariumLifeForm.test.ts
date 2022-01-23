@@ -32,14 +32,14 @@ describe(`${prefix} Contract`, () => {
 
     AquariumLifeForm = await ethers.getContractFactory('AquariumLifeForm')
 
-    let AQMF = await AquariumLifeForm.deploy(
-      'http://127.0.0.1/api/aqlf/aqmf', // uri
-      'Mutant Fishies', // name
-      'AQMF', // symbol
+    let AQMA = await AquariumLifeForm.deploy(
+      'http://127.0.0.1/api/aqlf/AQMA', // uri
+      'Mutant Anchovies', // name
+      'AQMA', // symbol
       ethers.utils.parseUnits('1', 'ether'), // mint cost
       20, // max to batch mint
       100, // reserved for giveaways
-      10000, // 10k AQMF
+      10000 // 10k AQMA
     )
 
     let AQRS = await AquariumLifeForm.deploy(
@@ -49,13 +49,13 @@ describe(`${prefix} Contract`, () => {
       parsedDecimalValue(0.1), // mint cost
       20, // max to batch mint
       100, // reserved for giveaways
-      7500, // 7.5k AQRS
+      7500 // 7.5k AQRS
     )
 
-    aquariumLifeForms.push(AQMF)
+    aquariumLifeForms.push(AQMA)
     aquariumLifeForms.push(AQRS)
 
-    await AQMF.deployed()
+    await AQMA.deployed()
     await AQRS.deployed()
 
     Plankton = await ethers.getContractFactory('Plankton')
@@ -66,19 +66,16 @@ describe(`${prefix} Contract`, () => {
 
   describe(`${prefix} - Deploy`, () => {
     it('Should have minted 1 NFT upon contract creation', async () => {
-      expect(
-        await aquariumLifeForms[0].totalSupply(),
-        'AQMF was not deployed',
-      ).to.equal(1)
+      expect(await aquariumLifeForms[0].totalSupply(), 'AQMA was not deployed').to.equal(1)
 
       expect(
         await aquariumLifeForms[0].balanceOf(owner.address),
-        'AQMF #1 wasnt delivered',
+        'AQMA #1 wasnt delivered'
       ).to.equal(1)
     })
   })
 
-  describe(`${prefix} - Mint AQMF`, () => {
+  describe(`${prefix} - Mint AQMA`, () => {
     it('Should mint 20 NFTs', async () => {
       let amount = 10
 
@@ -86,27 +83,22 @@ describe(`${prefix} Contract`, () => {
 
       await aquariumLifeForms[0].connect(mockPlayer).mintAQLF(amount)
 
-      expect(
-        await aquariumLifeForms[0].totalSupply(),
-        'AQMF was not deployed',
-      ).to.equal(1 + amount) // 1 was the previously minted NFT.
+      expect(await aquariumLifeForms[0].totalSupply(), 'AQMA was not deployed').to.equal(1 + amount) // 1 was the previously minted NFT.
 
       expect(
         await aquariumLifeForms[0].balanceOf(mockPlayer.address),
-        'AQMF #2 - #11 not delivered',
+        'AQMA #2 - #11 not delivered'
       ).to.equal(amount)
     })
   })
 
-  describe(`${prefix} - Feed AQMF with PLANK`, () => {
-    it(`Should burn ${feedAmount} PLANK and update AQMF battleCountSinceFed`, async () => {
-      await plankton
-        .connect(owner)
-        .burnPlanktons(parsedDecimalValue(feedAmount))
+  describe(`${prefix} - Feed AQMA with PLANK`, () => {
+    it(`Should burn ${feedAmount} PLANK and update AQMA battleCountSinceFed`, async () => {
+      await plankton.connect(owner).burnPlanktons(parsedDecimalValue(feedAmount))
       // TODO: mock API call to update the battleCountSinceFed
 
       expect(await plankton.totalSupply(), 'Plankton wasnt burned').to.equal(
-        parsedDecimalValue(planktonInitialSupply - feedAmount),
+        parsedDecimalValue(planktonInitialSupply - feedAmount)
       )
     })
   })

@@ -18,13 +18,8 @@ describe(`${prefix} Plankton Token Contract`, () => {
   let addrs: SignerWithAddress
 
   beforeEach(async () => {
-    ;[
-      owner,
-      beneficiary,
-      mockPlayer,
-      mockPlayer2,
-      addrs,
-    ] = await ethers.getSigners()
+    ;[owner, beneficiary, mockPlayer, mockPlayer2, addrs] =
+      await ethers.getSigners()
 
     Plankton = await ethers.getContractFactory('Plankton')
     plankton = await Plankton.deploy(initialSupply, beneficiary.address)
@@ -34,11 +29,13 @@ describe(`${prefix} Plankton Token Contract`, () => {
 
   describe(`${prefix} Deployment`, () => {
     it('Should return the beneficiary balance once deployed', async () => {
-      const beneficiaryBalance = await plankton.balanceOf(beneficiary.address)
+      const beneficiaryBalance = await plankton.balanceOf(
+        beneficiary.address
+      )
 
       expect(
         beneficiaryBalance,
-        'beneficiary did not receive initialSupply',
+        'beneficiary did not receive initialSupply'
       ).to.equal(parsedDecimalValue(initialSupply))
     })
   })
@@ -51,16 +48,21 @@ describe(`${prefix} Plankton Token Contract`, () => {
         .connect(beneficiary)
         .transfer(mockPlayer.address, parsedDecimalValue(transferAmmount))
 
-      const mockPlayerBalance = await plankton.balanceOf(mockPlayer.address)
-      const beneficiaryBalance = await plankton.balanceOf(beneficiary.address)
-
-      expect(mockPlayerBalance, 'mockPlayer balance is not correct').to.equal(
-        parsedDecimalValue(transferAmmount),
+      const mockPlayerBalance = await plankton.balanceOf(
+        mockPlayer.address
       )
+      const beneficiaryBalance = await plankton.balanceOf(
+        beneficiary.address
+      )
+
+      expect(
+        mockPlayerBalance,
+        'mockPlayer balance is not correct'
+      ).to.equal(parsedDecimalValue(transferAmmount))
 
       expect(beneficiaryBalance).to.equal(
         parsedDecimalValue(initialSupply).toBigInt() -
-          parsedDecimalValue(transferAmmount).toBigInt(),
+          parsedDecimalValue(transferAmmount).toBigInt()
       )
     })
   })
@@ -71,12 +73,12 @@ describe(`${prefix} Plankton Token Contract`, () => {
 
       await plankton.mintPlanktons(
         mockPlayer2.address,
-        parsedDecimalValue(plankToMint),
+        parsedDecimalValue(plankToMint)
       )
 
       expect(
         await plankton.totalSupply(),
-        'plankton totalSupply is not what it should be',
+        'plankton totalSupply is not what it should be'
       ).to.equal(parsedDecimalValue(initialSupply + plankToMint))
     })
 
@@ -89,7 +91,7 @@ describe(`${prefix} Plankton Token Contract`, () => {
 
       expect(
         await plankton.totalSupply(),
-        'plankton totalSupply is not what it should be',
+        'plankton totalSupply is not what it should be'
       ).to.equal(parsedDecimalValue(initialSupply - plankToBurn))
     })
   })
