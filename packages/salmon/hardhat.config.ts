@@ -32,7 +32,7 @@ task('deploy-currency', 'Deploys your ERC-20 in-game token')
     false
   )
   .setAction(async ({ supply, beneficiary }, hre) => {
-    // await hre.run('compile')
+    await hre.run('compile')
 
     const PLANK = await hre.ethers.getContractFactory('Plankton')
     const plank = await PLANK.deploy(supply, beneficiary)
@@ -114,9 +114,6 @@ task('deploy-nft', 'Deploys a new NFT collection')
       console.log(`${await aqlf.symbol()} deployed to:`, aqlf.address)
     }
   )
-
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
 
 const config: HardhatUserConfig = {
   solidity: '0.8.4',

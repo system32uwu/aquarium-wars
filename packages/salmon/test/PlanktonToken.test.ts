@@ -9,7 +9,7 @@ const prefix = '[PLANK]'
 describe(`${prefix} Plankton Token Contract`, () => {
   let Plankton: Plankton__factory
   let plankton: Plankton
-  let initialSupply = 2 * 10 ** 9 // Print 2 billion PLANK
+  const initialSupply = 2 * 10 ** 9 // Print 2 billion PLANK
 
   let owner: SignerWithAddress
   let beneficiary: SignerWithAddress
