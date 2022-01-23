@@ -1,11 +1,12 @@
-require("dotenv").config()
-
 import { HardhatUserConfig, task, types } from 'hardhat/config'
 import '@nomiclabs/hardhat-etherscan'
 import '@nomiclabs/hardhat-waffle'
 import '@typechain/hardhat'
 import 'hardhat-gas-reporter'
 import 'solidity-coverage'
+import 'hardhat-ethernal'
+
+require('dotenv').config()
 
 task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners()
@@ -31,12 +32,17 @@ task('deploy-currency', 'Deploys your ERC-20 in-game token')
     false
   )
   .setAction(async ({ supply, beneficiary }, hre) => {
-    await hre.run('compile')
+    // await hre.run('compile')
 
     const PLANK = await hre.ethers.getContractFactory('Plankton')
     const plank = await PLANK.deploy(supply, beneficiary)
 
     await plank.deployed()
+
+    await hre.ethernal.push({
+      name: 'Plankton',
+      address: plank.address,
+    })
 
     console.log('$PLANK deployed to:', plank.address)
   })
@@ -121,6 +127,9 @@ const config: HardhatUserConfig = {
         process.env.PRIVATE_KEY !== undefined
           ? [process.env.PRIVATE_KEY]
           : [],
+    },
+    hardhat: {
+      chainId: 1337,
     },
   },
   gasReporter: {

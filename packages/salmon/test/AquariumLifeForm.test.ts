@@ -28,7 +28,8 @@ describe(`${prefix} Contract`, () => {
   const feedAmount = 100
 
   beforeEach(async () => {
-    ;[owner, addr1, mockPlayer, mockPlayer2, addrs] = await ethers.getSigners()
+    ;[owner, addr1, mockPlayer, mockPlayer2, addrs] =
+      await ethers.getSigners()
 
     AquariumLifeForm = await ethers.getContractFactory('AquariumLifeForm')
 
@@ -66,7 +67,10 @@ describe(`${prefix} Contract`, () => {
 
   describe(`${prefix} - Deploy`, () => {
     it('Should have minted 1 NFT upon contract creation', async () => {
-      expect(await aquariumLifeForms[0].totalSupply(), 'AQMA was not deployed').to.equal(1)
+      expect(
+        await aquariumLifeForms[0].totalSupply(),
+        'AQMA was not deployed'
+      ).to.equal(1)
 
       expect(
         await aquariumLifeForms[0].balanceOf(owner.address),
@@ -83,7 +87,10 @@ describe(`${prefix} Contract`, () => {
 
       await aquariumLifeForms[0].connect(mockPlayer).mintAQLF(amount)
 
-      expect(await aquariumLifeForms[0].totalSupply(), 'AQMA was not deployed').to.equal(1 + amount) // 1 was the previously minted NFT.
+      expect(
+        await aquariumLifeForms[0].totalSupply(),
+        'AQMA was not deployed'
+      ).to.equal(1 + amount) // 1 was the previously minted NFT.
 
       expect(
         await aquariumLifeForms[0].balanceOf(mockPlayer.address),
@@ -94,12 +101,15 @@ describe(`${prefix} Contract`, () => {
 
   describe(`${prefix} - Feed AQMA with PLANK`, () => {
     it(`Should burn ${feedAmount} PLANK and update AQMA battleCountSinceFed`, async () => {
-      await plankton.connect(owner).burnPlanktons(parsedDecimalValue(feedAmount))
+      await plankton
+        .connect(owner)
+        .burnPlanktons(parsedDecimalValue(feedAmount))
       // TODO: mock API call to update the battleCountSinceFed
 
-      expect(await plankton.totalSupply(), 'Plankton wasnt burned').to.equal(
-        parsedDecimalValue(planktonInitialSupply - feedAmount)
-      )
+      expect(
+        await plankton.totalSupply(),
+        'Plankton wasnt burned'
+      ).to.equal(parsedDecimalValue(planktonInitialSupply - feedAmount))
     })
   })
 })
