@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv'
+require("dotenv").config()
 
 import { HardhatUserConfig, task, types } from 'hardhat/config'
 import '@nomiclabs/hardhat-etherscan'
@@ -7,10 +7,6 @@ import '@typechain/hardhat'
 import 'hardhat-gas-reporter'
 import 'solidity-coverage'
 
-dotenv.config()
-
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
 task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners()
 
@@ -19,7 +15,7 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
   }
 })
 
-task('deploy-plank', 'Deploys $PLANK')
+task('deploy-currency', 'Deploys your ERC-20 in-game token')
   .addPositionalParam(
     'supply',
     'Initial Supply',
@@ -34,20 +30,18 @@ task('deploy-plank', 'Deploys $PLANK')
     types.string,
     false
   )
-  .setAction(async (taskArgs, hre) => {
-    console.log(taskArgs)
+  .setAction(async ({ supply, beneficiary }, hre) => {
     await hre.run('compile')
 
     const PLANK = await hre.ethers.getContractFactory('Plankton')
-    const plank = await PLANK.deploy(process.argv[2], process.argv[3])
+    const plank = await PLANK.deploy(supply, beneficiary)
 
     await plank.deployed()
 
     console.log('$PLANK deployed to:', plank.address)
-    console.log(process.argv.join(', '))
   })
 
-task('deploy-aqlf', 'Deploys a new Aquarium Life Form collection')
+task('deploy-nft', 'Deploys a new NFT collection')
   .addPositionalParam(
     'baseUri',
     'Base URI',
@@ -91,18 +85,29 @@ task('deploy-aqlf', 'Deploys a new Aquarium Life Form collection')
     types.int,
     false
   )
-  .setAction(async (taskArgs, hre) => {
-    console.log(taskArgs)
-    await hre.run('compile')
+  .setAction(
+    async (
+      { baseUri, name, symbol, price, maxmint, reserved, supply },
+      hre
+    ) => {
+      await hre.run('compile')
 
-    const AQLF = await hre.ethers.getContractFactory('AquariumLifeForm')
-    // const aqlf = await AQLF.deploy(taskArgs)
+      const AQLF = await hre.ethers.getContractFactory('AquariumLifeForm')
+      const aqlf = await AQLF.deploy(
+        baseUri,
+        name,
+        symbol,
+        price,
+        maxmint,
+        reserved,
+        supply
+      )
 
-    // await aqlf.deployed()
+      await aqlf.deployed()
 
-    // console.log(`${await aqlf.symbol()} deployed to:`, aqlf.address)
-    console.log(process.argv.join(', '))
-  })
+      console.log(`${await aqlf.symbol()} deployed to:`, aqlf.address)
+    }
+  )
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more

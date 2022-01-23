@@ -1,4 +1,6 @@
-# NFT Collection Generator
+# Shark
+
+Shark is the one in charge of processing all of your assets, it will end up outputting all of your fishy NFT collections (his stomach does such cool things!).
 
 ## About
 

@@ -3,10 +3,6 @@
   "author": "Mateo Carriqui <mateocarriqui7@gmail.com>",
   "version": "1.0.0",
   "license": "MIT",
-  "scripts": {
-    "deploy-plank": "ts-node scripts/deploy-plank.ts",
-    "deploy-aqlf": "ts-node scripts/deploy-aqlf.ts"
-  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.4",
     "@nomiclabs/hardhat-etherscan": "^2.1.8",

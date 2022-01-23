@@ -1,3 +1,23 @@
+# Salmon
+
+Salmon is the one in charge of the Smart Contracts, these were written in Solidity, because Salmon and Solidty both start with S.
+
+## Usage
+
+Run the tests, I said run them damn it! `yarn hardhat test`
+
+Run a local ethereum blockchain node: `yarn hardhat node`
+
+Run `yarn hardhat deploy-currency --network localhost 20000000 0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199` to deploy your currency!
+
+Then you can either connect through metamask or use the hardhat CLI to play around with the token.
+
+To deploy a collection the process is similar, don't stop your node:
+
+Run `yarn hardhat deploy-nft --network localhost ipfs:///QmfZFRYsYoC3F3MT3YTAgNFs9nG2JfrT1xJEFTffMgaW8N/ "Mutant Anchovies" AQMA 100 20 100 100`
+
+For further information on this scripts, run `yarn hardhat help name_of_script`
+
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
