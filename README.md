@@ -1,10 +1,10 @@
 # Aquarium Wars
 
 * Salmon: Smart contracts
-  - State: Almost finished
+  - State: Finished (but pending potential additions and functionalities)
 * Shark: Aquarium Life Forms (NFTs) generator
-  - State: Almost finished (Pending Typescript rewrite and adding the option of using a centralized service instead of IPFS)
+  - State: Almost finished (Pending finishing option of using a centralized service instead of IPFS)
 * Tuna: Website (server + frontend, using next.js)
-  - State: Unfinished
-* Whale: Database (using prisma and )
-  - State: Unfinished
+  - State: TODO
+* Whale: Database (using prisma and TypeORM)
+  - State: TODO
