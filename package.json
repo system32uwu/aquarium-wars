@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "salmon": "yarn workspace @aquarium-wars/salmon",
-    "tuna": "yarn workspace @aquarium-wars/tuna",
+    "goldfish": "yarn workspace @aquarium-wars/goldfish",
     "whale": "yarn workspace @aquarium-wars/whale",
     "shark": "yarn workspace @aquarium-wars/shark"
   },
