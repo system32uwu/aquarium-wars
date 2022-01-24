@@ -31,7 +31,9 @@ describe(`${prefix} Contract`, () => {
     ;[owner, addr1, mockPlayer, mockPlayer2, addrs] =
       await ethers.getSigners()
 
-    AquariumLifeForm = await ethers.getContractFactory('AquariumLifeForm')
+    AquariumLifeForm = (await ethers.getContractFactory(
+      'AquariumLifeForm'
+    )) as AquariumLifeForm__factory
 
     let AQMA = await AquariumLifeForm.deploy(
       'http://127.0.0.1/api/aqlf/AQMA', // uri
@@ -59,7 +61,9 @@ describe(`${prefix} Contract`, () => {
     await AQMA.deployed()
     await AQRS.deployed()
 
-    Plankton = await ethers.getContractFactory('Plankton')
+    Plankton = (await ethers.getContractFactory(
+      'Plankton'
+    )) as Plankton__factory
     plankton = await Plankton.deploy(planktonInitialSupply, owner.address)
 
     await plankton.deployed()

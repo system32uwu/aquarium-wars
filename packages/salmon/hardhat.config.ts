@@ -32,8 +32,6 @@ task('deploy-currency', 'Deploys your ERC-20 in-game token')
     false
   )
   .setAction(async ({ supply, beneficiary }, hre) => {
-    await hre.run('compile')
-
     const PLANK = await hre.ethers.getContractFactory('Plankton')
     const plank = await PLANK.deploy(supply, beneficiary)
 
@@ -96,8 +94,6 @@ task('deploy-nft', 'Deploys a new NFT collection')
       { baseUri, name, symbol, price, maxmint, reserved, supply },
       hre
     ) => {
-      await hre.run('compile')
-
       const AQLF = await hre.ethers.getContractFactory('AquariumLifeForm')
       const aqlf = await AQLF.deploy(
         baseUri,
@@ -110,6 +106,11 @@ task('deploy-nft', 'Deploys a new NFT collection')
       )
 
       await aqlf.deployed()
+      // pushing this to ethernal throws an error ? | a workaround is to manually upload the ABI for the contract.
+      // await hre.ethernal.push({ 
+      //   name,
+      //   address: aqlf.address,
+      // })
 
       console.log(`${await aqlf.symbol()} deployed to:`, aqlf.address)
     }

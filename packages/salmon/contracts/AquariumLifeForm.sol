@@ -43,9 +43,6 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
     maxMint = _maxMint;
     reserved = _reserved;
     maxSupply = _maxSupply;
-
-    // dev gets first NFT
-    _safeMint(msg.sender, 0);
   }
 
   function mintAQLF(uint256 _amount) public payable {
@@ -61,7 +58,7 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
     require(msg.value < _total, 'Incorrect payment sent');
 
     for (uint256 i; i < _amount; i++) {
-      _safeMint(msg.sender, _supply + i);
+      _safeMint(msg.sender, _supply + i + 1);
     }
   }
 

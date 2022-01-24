@@ -21,7 +21,9 @@ describe(`${prefix} Plankton Token Contract`, () => {
     ;[owner, beneficiary, mockPlayer, mockPlayer2, addrs] =
       await ethers.getSigners()
 
-    Plankton = await ethers.getContractFactory('Plankton')
+    Plankton = (await ethers.getContractFactory(
+      'Plankton'
+    )) as Plankton__factory
     plankton = await Plankton.deploy(initialSupply, beneficiary.address)
 
     await plankton.deployed()

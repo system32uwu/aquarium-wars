@@ -1,0 +1,7 @@
+const AQMA = await ethers.getContractFactory('AquariumLifeForm')
+const aqma = await AQMA.attach("0x5FbDB2315678afecb367f032d93F642f64180aa3")
+await aqma.totalSupply()
+await aqma.pause(false)
+await aqma.totalSupply()
+await aqma.mintAQLF(1)
+await aqma.totalSupply()
