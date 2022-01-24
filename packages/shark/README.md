@@ -6,6 +6,10 @@ Shark is the one in charge of processing all of your assets, it will end up outp
 
 Fork of [nft-collection-generator](https://github.com/manuelpires/nft-collection-generator.git), made to produce multiple collections with different config files for the Aquarium
 
+## Setup
+
+I'm running docker with an instance of [go-ipfs](https://hub.docker.com/r/ipfs/go-ipfs), otherwise you can install it to your system.
+
 ## Usage
 
 ### Creating a new collection
