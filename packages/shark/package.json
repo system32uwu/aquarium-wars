@@ -2,6 +2,7 @@
   "name": "@aquarium-wars/shark",
   "version": "1.0.0",
   "description": "Generates images and metadata for multiple collection of NFTs.",
+  "author": "Mateo Carriquí <mateocarriqui7@gmail.com>",
   "main": "index.js",
   "scripts": {
     "create-collection": "node scripts/create-collection.js",
@@ -12,7 +13,6 @@
     "calculate-hash": "node scripts/calculate-hash.js",
     "bite": "yarn test && yarn build $@ && yarn deploy $@ && yarn create-gif && yarn calculate-hash"
   },
-  "author": "Mateo Carriquí",
   "license": "MIT",
   "dependencies": {
     "canvas": "^2.8.0",

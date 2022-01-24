@@ -1,0 +1,7 @@
+{
+  "name": "@aquarium-wars/goldfish",
+  "version": "1.0.0",
+  "description": "Website for aquarium wars",
+  "author": "Mateo Carriquí <mateocarriqui7@gmail.com>",
+  "main": "src/index.ts"
+}

@@ -1,7 +1,8 @@
 {
   "name": "@aquarium-wars/salmon",
-  "author": "Mateo Carriqui <mateocarriqui7@gmail.com>",
   "version": "1.0.0",
+  "description": "Smart contracts for aquarium wars",
+  "author": "Mateo Carriquí <mateocarriqui7@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@openzeppelin/contracts": "^4.4.2"
