@@ -25,13 +25,11 @@ services:
     build:
       context: ./packages/goldfish
       dockerfile: Dockerfile
-    restart: always
-    command: node server.js
     ports:
       - "0.0.0.0:80:3000"
     volumes:
-      - ./packages/goldfish:/usr/src/app
-      - /usr/src/app/node_modules
-      - /usr/src/app/.next
+      - ./packages/goldfish:/app
+      - /app/node_modules
+      - /app/.next
 
 # postgres could be added if whale used postgres instead of supabase
