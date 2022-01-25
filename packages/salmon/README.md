@@ -10,11 +10,13 @@ Run a local ethereum blockchain node: `yarn hardhat node`
 
 Run `yarn hardhat deploy-currency --network localhost 20000000 0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199` to deploy your currency!
 
-Then you can either connect through metamask or use the hardhat CLI to play around with the token. If you want to go with metamask and have a block explorer, be sure to install [ethernal](https://tryethernal.com) globally and log in. Then you should be able to have access to it through [ethernal's app](https://app.tryethernal.com/)
+Then you can either connect through metamask or use the hardhat CLI to play around with the token.
 
 To deploy a collection the process is similar, don't stop your node:
 
 Run `yarn hardhat deploy-nft --network localhost ipfs:///QmfZFRYsYoC3F3MT3YTAgNFs9nG2JfrT1xJEFTffMgaW8N/ "Mutant Anchovies" AQMA 100 20 100 100`
+
+NOTE: the baseURI should be the URI of your metadata files, it can use an HTTP gateway instead of the ipfs protocol directly as explained in `shark`
 
 For further information on this scripts, run `yarn hardhat help name_of_script`
 

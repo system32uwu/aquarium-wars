@@ -8,7 +8,7 @@ Fork of [nft-collection-generator](https://github.com/manuelpires/nft-collection
 
 ## Setup
 
-I'm running docker with an instance of [go-ipfs](https://hub.docker.com/r/ipfs/go-ipfs), otherwise you can install it to your system.
+I'm running docker-compose with an instance of [go-ipfs](https://hub.docker.com/r/ipfs/go-ipfs), otherwise you can install it to your system.
 
 ## Usage
 

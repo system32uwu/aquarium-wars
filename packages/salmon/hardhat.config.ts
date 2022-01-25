@@ -4,7 +4,6 @@ import '@nomiclabs/hardhat-waffle'
 import '@typechain/hardhat'
 import 'hardhat-gas-reporter'
 import 'solidity-coverage'
-import 'hardhat-ethernal'
 
 require('dotenv').config()
 
@@ -36,11 +35,6 @@ task('deploy-currency', 'Deploys your ERC-20 in-game token')
     const plank = await PLANK.deploy(supply, beneficiary)
 
     await plank.deployed()
-
-    await hre.ethernal.push({
-      name: 'Plankton',
-      address: plank.address,
-    })
 
     console.log('$PLANK deployed to:', plank.address)
   })
@@ -106,11 +100,6 @@ task('deploy-nft', 'Deploys a new NFT collection')
       )
 
       await aqlf.deployed()
-      // pushing this to ethernal throws an error ? | a workaround is to manually upload the ABI for the contract.
-      // await hre.ethernal.push({ 
-      //   name,
-      //   address: aqlf.address,
-      // })
 
       console.log(`${await aqlf.symbol()} deployed to:`, aqlf.address)
     }
