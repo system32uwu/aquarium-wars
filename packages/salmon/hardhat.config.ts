@@ -5,6 +5,9 @@ import '@typechain/hardhat'
 import 'hardhat-gas-reporter'
 import 'solidity-coverage'
 
+// import { promises as fs } from 'fs'
+import { mkdir, copy } from 'fs-extra'
+
 require('dotenv').config()
 
 task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
@@ -104,6 +107,25 @@ task('deploy-nft', 'Deploys a new NFT collection')
       console.log(`${await aqlf.symbol()} deployed to:`, aqlf.address)
     }
   )
+
+task(
+  'compile',
+  'Compiles smart contracts and copies ABIs of contracts over to goldfish',
+  async (_, __, runSuper) => {
+    await runSuper() // compile
+
+    const to = `${__dirname}/../goldfish/contracts`
+    const from = `${__dirname}/artifacts/contracts`
+
+    await copy(from, to, {
+      overwrite: true,
+      recursive: true,
+      filter: (path) => {
+        return path.indexOf('.dbg.json') === -1 // filter out debug files
+      },
+    }) // copy over to goldfish
+  }
+)
 
 const config: HardhatUserConfig = {
   solidity: '0.8.4',
