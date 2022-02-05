@@ -5,10 +5,15 @@ import { FaWallet } from "react-icons/fa"
 import { Icon } from "@chakra-ui/icons"
 import { Button } from "@chakra-ui/react"
 import Link from 'next/link'
+import { useWalletStore } from '../../store/web3'
+import ConnectButton from './connectButton'
+import Account from './account'
 
 interface IProps { }
 
 const Header: React.FC<IProps> = ({ }) => {
+    const { instance } = useWalletStore()
+
     return <header className="text-gray-600 body-font text-xl">
         <div className="container flex flex-wrap p-2 flex-col md:flex-row items-center mx-auto">
 
@@ -27,7 +32,9 @@ const Header: React.FC<IProps> = ({ }) => {
                 <HeaderLink title="About" href="/about" />
                 <HeaderLink title="Litepaper" href="/litepaper" />
             </nav>
-            <Button insetBlockEnd={0.5} rounded="md" size="lg" fontSize="xl" rightIcon={<Icon as={FaWallet} />} p={4}>Connect to wallet</Button>
+            {
+                !instance ? <ConnectButton /> : <Account />
+            }
         </div>
     </header>
 }
