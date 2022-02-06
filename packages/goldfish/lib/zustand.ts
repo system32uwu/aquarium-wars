@@ -31,7 +31,7 @@ export const useWalletStore = create<WalletState>((set) => ({
       cacheProvider: true, // optional
       providerOptions, // required
     })
-
+    
     web3Modal
       .connect()
       .then(async (instance) => {

@@ -5,7 +5,7 @@ import { FaWallet } from "react-icons/fa"
 import { Icon } from "@chakra-ui/icons"
 import { Button } from "@chakra-ui/react"
 import Link from 'next/link'
-import { useWalletStore } from '../../store/web3'
+import { useWalletStore } from '../../lib/zustand'
 import ConnectButton from './connectButton'
 import Account from './account'
 

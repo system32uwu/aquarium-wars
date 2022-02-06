@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/button'
 import { Icon } from '@chakra-ui/icons'
 import * as React from 'react'
 import { FaWallet } from 'react-icons/fa'
-import { useWalletStore } from '../../store/web3'
+import { useWalletStore } from '../../lib/zustand'
 
 interface IProps {}
 
