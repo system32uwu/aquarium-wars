@@ -9,7 +9,7 @@ generator client {
 }
 
 model User {
-    username String @unique @default(cuid())
+    username String @unique @default(uuid())
     address  String @unique
     nonce    String
 }
