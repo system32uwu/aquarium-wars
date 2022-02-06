@@ -1,4 +1,5 @@
-import { prisma, User } from '@aquarium-wars/whale'
+import { prisma } from '../lib/prisma'
+import { User } from "@prisma/client"
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
 

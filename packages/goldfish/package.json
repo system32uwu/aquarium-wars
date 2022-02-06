@@ -5,7 +5,7 @@
   "author": "Mateo Carriquí <mateocarriqui7@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "next dev",
+    "dev": "prisma generate && prisma migrate dev init && next dev",
     "build": "next build",
     "start": "next start -p ${PORT:=3000}"
   },
@@ -19,7 +19,6 @@
     "cookies": "^0.8.0",
     "ethers": "^5.5.4",
     "framer-motion": "^5",
-    "gun": "^0.2020.1235",
     "next": "latest",
     "next-auth": "^4.2.1",
     "react": "^17.0.2",
