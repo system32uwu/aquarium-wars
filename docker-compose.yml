@@ -21,20 +21,10 @@ services:
       - /app/node_modules
     ports:
       - '0.0.0.0:8545:8545'
-  whale: # database
-    build:
-      context: ./packages/whale
-      dockerfile: Dockerfile
-    # command: yarn run prisma generate && yarn run build && yarn run prisma migrate --dev init
-    volumes:
-     - ./packages/whale:/app
-     - /app/node_modules
   goldfish: # Website
     build:
       context: ./packages/goldfish
       dockerfile: Dockerfile
-    depends_on: 
-      - whale
     ports:
       - '0.0.0.0:80:3000'
     volumes:

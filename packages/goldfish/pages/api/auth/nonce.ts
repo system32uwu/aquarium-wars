@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '@aquarium-wars/whale'
+import { prisma } from '../../../lib/prisma'
 import { nonce } from '../../../util/web3'
 
 const nonceApi = async (req: NextApiRequest, res: NextApiResponse) => {

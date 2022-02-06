@@ -1,3 +1,4 @@
+import { User } from '@prisma/client'
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'
 import create, { State } from 'zustand'
@@ -11,6 +12,7 @@ type Wallet = {
 interface WalletState extends State {
   instance?: Wallet
   message?: string
+  user?: User
   connect: () => void
   disconnect: () => void
 }
@@ -61,18 +63,19 @@ export const useWalletStore = create<WalletState>((set) => ({
         const walletResData = await walletRes.json()
 
         if (walletRes.status === 200) {
-          set((_) => ({ instance: { provider, signer } }))
+          set((_) => ({ instance: { provider, signer }, user: walletResData }))
         } else {
           set((_) => ({ message: walletResData.error }))
         }
       })
       .catch((e) => {
-        set((_) => ({ instance: undefined, message: e.message }))
+        set((_) => ({ instance: undefined, user: undefined, message: e.message }))
       })
   },
   disconnect: () => {
     set((_) => ({
       instance: undefined,
+      user: undefined,
     }))
   },
 }))

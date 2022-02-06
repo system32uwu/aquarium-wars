@@ -1,4 +1,3 @@
-import { prisma } from '@aquarium-wars/whale'
 import { NextApiResponse } from 'next'
 import withAuth, { IWithAuthReq } from '../../util/withAuth'
 
