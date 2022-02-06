@@ -1,15 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiResponse } from 'next'
 import { prisma } from '../../../lib/prisma'
-import Cookies from 'cookies'
+import { IWithAuthReq, withAuthApi } from '../../../middleware/withAuth'
 
-const updateUsernameApi = async (req: NextApiRequest, res: NextApiResponse) => {
-  const cookies = new Cookies(req, res)
-  const address = cookies.get('session')
+const updateUsernameApi = async (req: IWithAuthReq, res: NextApiResponse) => {
   const { username } = req.body
 
   const user = await prisma.user.update({
     where: {
-      address: address,
+      address: req.user.address,
     },
     data: {
       username: username,
@@ -19,4 +17,4 @@ const updateUsernameApi = async (req: NextApiRequest, res: NextApiResponse) => {
   return res.json({ user })
 }
 
-export default updateUsernameApi
+export default withAuthApi(updateUsernameApi)
