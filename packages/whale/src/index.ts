@@ -1,8 +1,6 @@
 import 'reflect-metadata'
-// @ts-ignore
-export * from './generated'
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Prisma } from '@prisma/client'
 
 let prisma: PrismaClient
 
@@ -15,3 +13,4 @@ if (process.env.NODE_ENV === 'production') {
   prisma = global.prisma
 }
 export { prisma }
+export { User } from "@prisma/client"

@@ -7,9 +7,9 @@ services:
     volumes:
       - /ipfs/data:/ipfsdata
     ports:
-      - "4001:4001"
-      - "127.0.0.1:8080:8080"
-      - "127.0.0.1:5001:5001"
+      - '4001:4001'
+      - '127.0.0.1:8080:8080'
+      - '127.0.0.1:5001:5001'
   salmon: # Smart Contracts
     build:
       context: ./packages/salmon
@@ -20,16 +20,25 @@ services:
       - ./packages/salmon:/app
       - /app/node_modules
     ports:
-      - "0.0.0.0:8545:8545"
+      - '0.0.0.0:8545:8545'
+  whale: # database
+    build:
+      context: ./packages/whale
+      dockerfile: Dockerfile
+    # command: yarn run prisma generate && yarn run build && yarn run prisma migrate --dev init
+    volumes:
+     - ./packages/whale:/app
+     - /app/node_modules
   goldfish: # Website
     build:
       context: ./packages/goldfish
       dockerfile: Dockerfile
+    depends_on: 
+      - whale
     ports:
-      - "0.0.0.0:80:3000"
+      - '0.0.0.0:80:3000'
     volumes:
       - ./packages/goldfish:/app
       - /app/node_modules
       - /app/.next
-
 # postgres could be added if whale used postgres instead of supabase

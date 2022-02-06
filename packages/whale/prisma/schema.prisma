@@ -8,13 +8,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator typegraphql {
-  provider = "typegraphql-prisma"
-  output   = "../src/generated"
-}
+// generator typegraphql {
+//   provider = "typegraphql-prisma"
+//   output   = "../src/generated"
+// }
 
 model User {
-  address String @unique
-  nonce Int
   username String @unique @default(cuid())
+  address  String @unique
+  nonce    String
 }
