@@ -17,8 +17,8 @@ interface WalletState extends State {
   instance?: Wallet
   message?: string
   user?: PublicUser
-  connect: (silent: boolean) => void
-  disconnect: () => void
+  connect: (silent: boolean) => Promise<void>
+  disconnect: () => Promise<void>
 }
 
 export const useWalletStore = create<WalletState>((set) => ({
@@ -45,7 +45,7 @@ export const useWalletStore = create<WalletState>((set) => ({
       const signer = provider.getSigner()
 
       set((_) => ({ user: me.user, instance: { provider, signer } }))
-    } else if (!silent){
+    } else if (!silent) {
       // if they weren't logged in send the nonce challenge to verify identity
       web3Modal
         .connect()
