@@ -7,7 +7,7 @@ interface IProps {}
 const Index: React.FC<IProps> = ({}) => {
   const { user } = useWalletStore()
   return user ? (
-    <div className="text-white">Authenticated {user.address}</div>
+    <div className="text-white">Authenticated {user.username}</div>
   ) : (
     <div className="text-white">Re-connect wallet!</div>
   )

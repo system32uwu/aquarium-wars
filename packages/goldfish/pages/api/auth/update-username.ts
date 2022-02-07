@@ -12,6 +12,10 @@ const updateUsernameApi = async (req: IWithAuthReq, res: NextApiResponse) => {
     data: {
       username: username,
     },
+    select: {
+      address: true,
+      username: true,
+    },
   })
 
   return res.json({ user })

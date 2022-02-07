@@ -1,8 +1,8 @@
-import { User } from '@prisma/client'
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'
 import create, { State } from 'zustand'
 import { buildNonceMessage } from '../util/web3'
+import { PublicUser } from './types'
 
 const providerOptions = {
   /* See Provider Options Section */
@@ -16,7 +16,7 @@ type Wallet = {
 interface WalletState extends State {
   instance?: Wallet
   message?: string
-  user?: User
+  user?: PublicUser
   connect: (silent: boolean) => void
   disconnect: () => void
 }

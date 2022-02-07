@@ -1,15 +1,14 @@
 import { prisma } from '../lib/prisma'
-import { User } from '@prisma/client'
 import {
-  GetServerSideProps,
   GetServerSidePropsContext,
   NextApiRequest,
   NextApiResponse,
 } from 'next'
 import Cookies from 'cookies'
+import { PublicUser } from '../lib/types'
 
 export interface IWithAuthReq extends NextApiRequest {
-  user?: User
+  user?: PublicUser
 }
 
 export const withAuthApi = (handler) => async (req: IWithAuthReq, res: NextApiResponse) => {
@@ -20,6 +19,10 @@ export const withAuthApi = (handler) => async (req: IWithAuthReq, res: NextApiRe
     const user = await prisma.user.findUnique({
       where: {
         address: session,
+      },
+      select: {
+        address: true,
+        username: true,
       },
     })
 

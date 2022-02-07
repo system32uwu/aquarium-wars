@@ -10,7 +10,7 @@ const ConnectButton: React.FC<IProps> = () => {
   const { connect } = useWalletStore()
   return (
     <Button
-      onClick={() => connect()}
+      onClick={() => connect(false)}
       insetBlockEnd={0.5}
       rounded="md"
       size="lg"
