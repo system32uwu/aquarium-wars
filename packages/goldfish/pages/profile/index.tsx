@@ -4,7 +4,8 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs'
 import { useWalletStore } from '../../lib/zustand'
 import { withAuthView } from '../../middleware/withAuth'
 import RenderUserData from '../../components/RenderUserData'
-import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { EditIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+import { Input } from '@chakra-ui/input'
 
 interface IProps {}
 
@@ -15,7 +16,15 @@ const Profile: React.FC<IProps> = ({}) => {
       <Box w="full" p={2} justifyContent="center">
         <RenderUserData user={user} toSeeContent="your profile">
           <Container textAlign="center" rounded="full" p={2}>
-            <span className="text-white font-bold">{user?.username} </span>
+            <Box>
+              <Input
+                color="white"
+                variant="unstyled"
+                placeholder="A cool username"
+                value={user?.username}
+              />
+              <EditIcon></EditIcon>
+            </Box>
             <span className="text-gray-100 font-thin italic">
               <Link href={`https://etherscan.io/address/${user?.address}`} isExternal>
                 ({user?.address}) <ExternalLinkIcon mx="2px" />
@@ -24,7 +33,7 @@ const Profile: React.FC<IProps> = ({}) => {
           </Container>
         </RenderUserData>
       </Box>
-      <Box p={4} m={4} bgColor="cyan.50" rounded="3xl">
+      <Box p={4} mx={10} bgColor="cyan.50" rounded="3xl">
         <Tabs h="max">
           <TabList alignContent="center" justifyContent="center" justifyItems="center">
             <Tab>Owned Aquarium Life Forms</Tab>

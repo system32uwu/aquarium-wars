@@ -1,4 +1,4 @@
-const BUILD_COLLECTION = process.argv[2] || undefined;
+const BUILD_COLLECTION = process.argv[2] || undefined
 const { configPath } = require("../imports");
 const makeConfig = require(configPath(BUILD_COLLECTION));
 const { OUTPUT_PATH_META, TOTAL_TOKENS } = makeConfig(BUILD_COLLECTION);
