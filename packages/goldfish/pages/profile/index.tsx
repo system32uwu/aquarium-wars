@@ -1,15 +1,27 @@
 import * as React from 'react'
-import { Box, Container, Link, Text } from '@chakra-ui/layout'
+import { Box, Container, Link } from '@chakra-ui/layout'
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs'
 import { useWalletStore } from '../../lib/zustand'
 import { withAuthView } from '../../middleware/withAuth'
 import RenderUserData from '../../components/RenderUserData'
 import { EditIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import { Input } from '@chakra-ui/input'
+import { deployedCollection, getCollections } from '../../util/NFTCollections'
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel,
+} from '@chakra-ui/accordion'
+import AQLF from '../../contracts/AquariumLifeForm.sol/AquariumLifeForm.json'
+import NFTCollection from '../../components/NFTCollection'
 
-interface IProps {}
+interface IProps {
+  collections: deployedCollection[]
+}
 
-const Profile: React.FC<IProps> = ({}) => {
+const Profile: React.FC<IProps> = ({ collections }) => {
   const { user } = useWalletStore()
   return (
     <Box justifyContent="center" flex={1} width="full" mt={2} justifyItems="center">
@@ -17,12 +29,13 @@ const Profile: React.FC<IProps> = ({}) => {
         <RenderUserData user={user} toSeeContent="your profile">
           <Container textAlign="center" rounded="full" p={2}>
             <Box>
-              <Input
+              {/* <Input
                 color="white"
                 variant="unstyled"
                 placeholder="A cool username"
                 value={user?.username}
-              />
+              /> */}
+              {user?.username}
               <EditIcon></EditIcon>
             </Box>
             <span className="text-gray-100 font-thin italic">
@@ -43,7 +56,24 @@ const Profile: React.FC<IProps> = ({}) => {
 
           <TabPanels h="max">
             <TabPanel h="max">
-              <p>Show all the collections of NFTs in accordions with the NFTs that the user owns</p>
+              {/* <p>Show all the collections of NFTs in accordions with the NFTs that the user owns</p> */}
+              <Accordion>
+                {collections.map((c) => (
+                  <AccordionItem key={c.address}>
+                    <h2>
+                      <AccordionButton>
+                        <Box flex="1" textAlign="left">
+                          {c.name} ({c.symbol})
+                        </Box>
+                        <AccordionIcon />
+                      </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                      <NFTCollection collectionData={c} abi={AQLF.abi} />
+                    </AccordionPanel>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </TabPanel>
             <TabPanel>
               <p>Show all the battles in which the user fought</p>
@@ -58,9 +88,12 @@ const Profile: React.FC<IProps> = ({}) => {
   )
 }
 
-export const getServerSideProps = withAuthView((_) => {
+export const getServerSideProps = withAuthView(async (_) => {
+  const collections = await getCollections()
   return {
-    props: {},
+    props: {
+      collections,
+    },
   }
 })
 

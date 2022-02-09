@@ -48,21 +48,22 @@ services:
       context: ./
       dockerfile: Dockerfile
     restart: always
-    command: yarn salmon dev && yarn goldfish dev
+    command: bash -c "yarn salmon dev & yarn goldfish dev"
     volumes:
       - /app/node_modules
-
-      - ./packages/salmon:/app/packages/salmon
-      - ./packages/salmon/collections-data:/app/packages/salmon/collections-data
-      - /app/packages/salmon/node_modules
 
       - ./packages/goldfish:/app/packages/goldfish
       - /app/packages/goldfish/contracts
       - /app/packages/goldfish/node_modules
       - /app/packages/goldfish/.next
+
+      - ./packages/salmon:/app/packages/salmon
+      - ./packages/salmon/collections-data:/app/packages/salmon/collections-data
+      - /app/packages/salmon/node_modules
+
     ports:
       - '0.0.0.0:8545:8545'
-      - '80:3000'
+      - '0.0.0.0:80:3000'
 
     networks:
       - app-tier

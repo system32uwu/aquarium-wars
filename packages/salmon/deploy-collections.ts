@@ -20,9 +20,19 @@ const main = async () => {
 
     const cmd = `yarn deploy-nft ${args}`
 
-    console.log("deploying nft with the following command:\n", cmd)
+    console.log('deploying nft with the following command:\n', cmd)
 
-    exec(cmd)
+    exec(cmd, (error, stdout, stederr) => {
+      if (error) {
+        console.log('[deploy-collection] - Error:', error)
+      }
+
+      if (stederr) {
+        console.log('[deploy-collection] - Error:', error)
+      }
+
+      if (stdout) console.log('[deploy-collection] - Status:', stdout)
+    })
   }
 }
 

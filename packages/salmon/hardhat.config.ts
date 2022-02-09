@@ -8,6 +8,9 @@ import 'solidity-coverage'
 // import { promises as fs } from 'fs'
 import { writeFile, copy, mkdirp } from 'fs-extra'
 import { parseUnits } from '@ethersproject/units'
+import { Signer } from '@ethersproject/abstract-signer'
+import { ethers } from 'hardhat'
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 
 require('dotenv').config()
 
@@ -140,6 +143,7 @@ task('deploy-nft', 'Deploys a new NFT collection')
         'saved to:',
         `${deployedContractsDataDir}/deployed-${symbol}.json`
       )
+      await aqlf.pause(false)
     }
   )
 

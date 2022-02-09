@@ -1,5 +1,5 @@
 import { AppProps } from 'next/app'
-import Layout from '../components/Layout/layout'
+import Layout from '../components/Layout'
 import { ChakraProvider } from '@chakra-ui/react'
 import '../styles/globals.scss'
 

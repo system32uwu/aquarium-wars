@@ -9,8 +9,11 @@ import {
   chakra,
   Tooltip,
 } from '@chakra-ui/react'
+import { BigNumber, ethers } from 'ethers'
+import { useEffect, useState } from 'react'
 import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs'
 import { FiShoppingCart } from 'react-icons/fi'
+import { deployedCollection } from '../util/NFTCollections'
 
 interface RatingProps {
   rating: number
@@ -38,19 +41,29 @@ const Rating: React.FC<RatingProps> = ({ rating, numReviews }) => {
           }
           return <BsStar key={i} style={{ marginLeft: '1' }} />
         })}
-      <Box as="span" ml="2" color="gray.600" fontSize="sm">
-        {numReviews} review{numReviews > 1 && 's'}
-      </Box>
     </Box>
   )
 }
 
 interface INFTCardProps {
-  metadataURL: string
   tokenId: number
+  collectionData: deployedCollection
 }
 
-const NFTCard: React.FC<INFTCardProps> = ({metadataURL, tokenId}) => {
+const NFTCard: React.FC<INFTCardProps> = ({ tokenId, collectionData }) => {
+  const [metadata, setMetadata] = useState<any | null>(null)
+
+  useEffect(() => {
+    ;(async () => {
+      const _metadataRes = await fetch(
+        `${collectionData.baseUri.replace('ipfs:///', 'http://localhost:8080/ipfs/')}/${tokenId}`
+      )
+      const _metadata = await _metadataRes.json()
+      console.log(_metadata)
+      setMetadata(_metadata)
+    })()
+  }, [])
+
   return (
     <Flex p={50} w="full" alignItems="center" justifyContent="center">
       <Box
@@ -61,23 +74,29 @@ const NFTCard: React.FC<INFTCardProps> = ({metadataURL, tokenId}) => {
         shadow="lg"
         position="relative"
       >
-        {data.isNew && <Circle size="10px" position="absolute" top={2} right={2} bg="red.200" />}
+        {/* <Circle size="10px" position="absolute" top={2} right={2} bg="red.200" /> */}
 
-        <Image src={data.imageURL} alt={`Picture of ${data.name}`} roundedTop="lg" />
+        <Image src={metadata?.image} alt={`Picture of ${metadata?.name}`} roundedTop="lg" />
 
         <Box p="6">
-          <Box d="flex" alignItems="baseline">
-            {data.isNew && (
-              <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="red">
-                New
-              </Badge>
-            )}
-          </Box>
+          {/* <Box d="flex" alignItems="baseline">
+            <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="red">
+              {metadata?.tokenId}
+            </Badge> */}
+          {/* </Box> */}
           <Flex mt="1" justifyContent="space-between" alignContent="center">
             <Box fontSize="2xl" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-              {data.name}
+              {metadata?.name}
             </Box>
-            <Tooltip
+            <Box fontSize="2xl" color={useColorModeValue('gray.800', 'white')}>
+              <Box as="span" color={'gray.600'} fontSize="lg">
+                Ξ
+              </Box>
+              <Box as="span" ml={1}>
+                {ethers.utils.formatEther(BigNumber.from(collectionData.price.hex).toString())}
+              </Box>
+            </Box>
+            {/* <Tooltip
               label="Add to cart"
               bg="white"
               placement={'top'}
@@ -87,17 +106,10 @@ const NFTCard: React.FC<INFTCardProps> = ({metadataURL, tokenId}) => {
               <chakra.a href={'#'} display={'flex'}>
                 <Icon as={FiShoppingCart} h={7} w={7} alignSelf={'center'} />
               </chakra.a>
-            </Tooltip>
+            </Tooltip> */}
           </Flex>
-
           <Flex justifyContent="space-between" alignContent="center">
-            <Rating rating={data.rating} numReviews={data.numReviews} />
-            <Box fontSize="2xl" color={useColorModeValue('gray.800', 'white')}>
-              <Box as="span" color={'gray.600'} fontSize="lg">
-                £
-              </Box>
-              {data.price.toFixed(2)}
-            </Box>
+            <Rating rating={3} numReviews={4} />
           </Flex>
         </Box>
       </Box>
