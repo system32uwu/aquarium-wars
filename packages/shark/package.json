@@ -11,12 +11,13 @@
     "deploy": "node scripts/deploy.js",
     "create-gif": "node scripts/create-gif.js",
     "calculate-hash": "node scripts/calculate-hash.js",
-    "bite": "yarn test && yarn build $@ && yarn deploy $@ && yarn create-gif && yarn calculate-hash"
+    "bite": "./bite.sh"
   },
   "license": "MIT",
   "dependencies": {
     "canvas": "^2.8.0",
     "dotenv": "^10.0.0",
+    "fs-extra": "^10.0.0",
     "gif-encoder-2": "^1.0.5",
     "ipfs-http-client": "^55.0.0"
   },

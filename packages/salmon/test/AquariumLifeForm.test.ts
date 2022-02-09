@@ -30,6 +30,7 @@ describe(`${prefix} Contract`, () => {
   beforeEach(async () => {
     ;[owner, addr1, mockPlayer, mockPlayer2, addrs] =
       await ethers.getSigners()
+    console.log('owner')
 
     AquariumLifeForm = (await ethers.getContractFactory(
       'AquariumLifeForm'
@@ -69,23 +70,9 @@ describe(`${prefix} Contract`, () => {
     await plankton.deployed()
   })
 
-  describe(`${prefix} - Deploy`, () => {
-    it('Should have minted 1 NFT upon contract creation', async () => {
-      expect(
-        await aquariumLifeForms[0].totalSupply(),
-        'AQMA was not deployed'
-      ).to.equal(1)
-
-      expect(
-        await aquariumLifeForms[0].balanceOf(owner.address),
-        'AQMA #1 wasnt delivered'
-      ).to.equal(1)
-    })
-  })
-
   describe(`${prefix} - Mint AQMA`, () => {
     it('Should mint 20 NFTs', async () => {
-      let amount = 10
+      let amount = 20
 
       await aquariumLifeForms[0].pause(false) // marketplace opening
 
@@ -94,11 +81,11 @@ describe(`${prefix} Contract`, () => {
       expect(
         await aquariumLifeForms[0].totalSupply(),
         'AQMA was not deployed'
-      ).to.equal(1 + amount) // 1 was the previously minted NFT.
+      ).to.equal(amount)
 
       expect(
         await aquariumLifeForms[0].balanceOf(mockPlayer.address),
-        'AQMA #2 - #11 not delivered'
+        'AQMA #1 - #20 werent delivered'
       ).to.equal(amount)
     })
   })

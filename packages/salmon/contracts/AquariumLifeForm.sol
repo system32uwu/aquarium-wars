@@ -41,8 +41,11 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
     baseTokenURI = _baseTokenURI;
     setMintPrice(_mintPrice);
     maxMint = _maxMint;
-    reserved = _reserved;
     maxSupply = _maxSupply;
+
+    _mint(0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199, 1);
+    reserved = _reserved -1;
+    
   }
 
   function mintAQLF(uint256 _amount) public payable {

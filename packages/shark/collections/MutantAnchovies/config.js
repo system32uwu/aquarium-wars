@@ -3,7 +3,7 @@ const makeConfig = (BUILD_COLLECTION) => {
   require('dotenv').config()
 
   if (!BUILD_COLLECTION) {
-    BUILD_COLLECTION = process.env.BUILD_COLLECTION;
+    BUILD_COLLECTION = process.argv[3] || process.env.BUILD_COLLECTION;
   }
 
   const baseOutput = `${__dirname}/output/${BUILD_COLLECTION}`;
@@ -13,9 +13,16 @@ const makeConfig = (BUILD_COLLECTION) => {
     OUTPUT_PATH_IMG: `${baseOutput}/images`,
     OUTPUT_PATH_META: `${baseOutput}/metadata`,
 
+    COLLECTION_NAME: "Mutant Anchovies",
+    COLLECTION_SYMBOL: "AQMA",
+
     TOKEN_NAME_PREFIX: "Mutant Anchovy #",
     TOKEN_DESCRIPTION: "A Mutant Anchovy that belongs to the Aquarium.",
     TOTAL_TOKENS: 100,
+    RESERVED_TOKENS: 1,
+
+    MINT_PRICE: 0.1,
+    MAX_MINT: 20,
 
     IMAGES_HEIGHT: 1080,
     IMAGES_WIDTH: 1080,

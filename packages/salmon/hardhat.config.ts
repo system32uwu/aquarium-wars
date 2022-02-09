@@ -6,7 +6,11 @@ import 'hardhat-gas-reporter'
 import 'solidity-coverage'
 
 // import { promises as fs } from 'fs'
-import { mkdir, copy } from 'fs-extra'
+import { writeFile, copy, mkdirp } from 'fs-extra'
+import { parseUnits } from '@ethersproject/units'
+import { Signer } from '@ethersproject/abstract-signer'
+import { ethers } from 'hardhat'
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 
 require('dotenv').config()
 
@@ -64,7 +68,13 @@ task('deploy-nft', 'Deploys a new NFT collection')
     types.string,
     false
   )
-  .addPositionalParam('price', 'Mint Price', undefined, types.int, false)
+  .addPositionalParam(
+    'price',
+    'Mint Price',
+    undefined,
+    types.string,
+    false
+  )
   .addPositionalParam(
     'maxmint',
     'Max amount allowed to be minted at once',
@@ -91,6 +101,7 @@ task('deploy-nft', 'Deploys a new NFT collection')
       { baseUri, name, symbol, price, maxmint, reserved, supply },
       hre
     ) => {
+      price = parseUnits(price, 'ether')
       const AQLF = await hre.ethers.getContractFactory('AquariumLifeForm')
       const aqlf = await AQLF.deploy(
         baseUri,
@@ -105,6 +116,34 @@ task('deploy-nft', 'Deploys a new NFT collection')
       await aqlf.deployed()
 
       console.log(`${await aqlf.symbol()} deployed to:`, aqlf.address)
+
+      const deployedContractsDataDir = `${__dirname}/../goldfish/deployed-contracts`
+
+      await mkdirp(deployedContractsDataDir)
+
+      await writeFile(
+        `${deployedContractsDataDir}/deployed-${symbol}.json`,
+        JSON.stringify(
+          {
+            baseUri,
+            name,
+            symbol,
+            price,
+            maxmint,
+            reserved,
+            supply,
+            address: aqlf.address,
+          },
+          null,
+          2
+        )
+      )
+
+      console.log(
+        'saved to:',
+        `${deployedContractsDataDir}/deployed-${symbol}.json`
+      )
+      await aqlf.pause(false)
     }
   )
 

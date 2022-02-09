@@ -1,23 +1,23 @@
-const fs = require("fs");
+const fs = require('fs')
 
 // set env variable to the given collection name via argv
-const BUILD_COLLECTION = process.env.BUILD_COLLECTION || process.argv[2]
+const BUILD_COLLECTION = process.argv[2] || undefined
 
 // create collection using the argv name:
 // create collections/COLLECTION_NAME
 // create collections/COLLECTION_NAME/config.js
 
-const root = __dirname + "/..";
+const root = __dirname + '/..'
 
-const collectionDIR = `${root}/collections/${BUILD_COLLECTION}`;
+const collectionDIR = `${root}/collections/${BUILD_COLLECTION}`
 
-fs.mkdirSync(`${collectionDIR}/traits`, {recursive: true});
+fs.mkdirSync(`${collectionDIR}/traits`, { recursive: true })
 
 const genConfig = `const makeConfig = (BUILD_COLLECTION) => {
   require('dotenv').config()
 
   if (!BUILD_COLLECTION) {
-    BUILD_COLLECTION = process.env.BUILD_COLLECTION;
+    BUILD_COLLECTION = process.argv[3] || process.env.BUILD_COLLECTION;
   }
 
   const baseOutput = \`\${__dirname}/output/\${BUILD_COLLECTION}\`;
@@ -28,9 +28,16 @@ const genConfig = `const makeConfig = (BUILD_COLLECTION) => {
     OUTPUT_PATH_META: \`\${baseOutput}/metadata\`,
   
     // Update the variables below according to the collection you want to generate, let the ones aboves untouched unless you know what you're doing
+    COLLECTION_NAME: "${BUILD_COLLECTION}",
+    COLLECTION_SYMBOL: "NFT"
+
     TOKEN_NAME_PREFIX: "${BUILD_COLLECTION} #",
     TOKEN_DESCRIPTION: "This NFT Belongs to the ${BUILD_COLLECTION} collection.",
     TOTAL_TOKENS: 100,
+    RESERVED_TOKENS: 1,
+
+    MINT_PRICE: "0.1 ether",
+    MAX_MINT: 20,
   
     IMAGES_HEIGHT: 1080,
     IMAGES_WIDTH: 1080,
@@ -60,6 +67,6 @@ const genConfig = `const makeConfig = (BUILD_COLLECTION) => {
 
 module.exports = makeConfig;
 
-`;
+`
 
-fs.writeFileSync(`${collectionDIR}/config.js`, genConfig);
+fs.writeFileSync(`${collectionDIR}/config.js`, genConfig)

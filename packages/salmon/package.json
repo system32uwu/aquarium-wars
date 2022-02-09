@@ -5,7 +5,7 @@
   "author": "Mateo Carriquí <mateocarriqui7@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "hardhat node",
+    "dev": "hardhat compile && hardhat node",
     "console": "hardhat console --network localhost",
     "test": "hardhat test",
     "deploy-currency": "hardhat deploy-currency --network localhost",
@@ -14,7 +14,8 @@
     "accounts": "hardhat accounts",
     "balance": "hardhat balance",
     "send": "hardhat send",
-    "blockNumber": "hardhat blockNumber"
+    "blockNumber": "hardhat blockNumber",
+    "deploy-collections": "ts-node deploy-collections.ts"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.4.2"
