@@ -1,9 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
-import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 
 /// @title AquariumLifeForms, NFTs representing organisms of the Aquarium
@@ -60,20 +58,6 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
     for (uint256 i; i < _amount; i++) {
       _safeMint(msg.sender, _supply + i + 1);
     }
-  }
-
-  function walletOfOwner(address _owner)
-    public
-    view
-    returns (uint256[] memory)
-  {
-    uint256 tokenCount = balanceOf(_owner);
-
-    uint256[] memory tokensId = new uint256[](tokenCount);
-    for (uint256 i; i < tokenCount; i++) {
-      tokensId[i] = tokenOfOwnerByIndex(_owner, i);
-    }
-    return tokensId;
   }
 
   function setMintPrice(uint256 _newPrice) public onlyOwner {
