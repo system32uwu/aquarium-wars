@@ -1,18 +1,18 @@
 import {
   Flex,
-  Circle,
   Box,
   Image,
-  Badge,
   useColorModeValue,
-  Icon,
+  Badge,
+  Circle,
   chakra,
+  Icon,
   Tooltip,
 } from '@chakra-ui/react'
+import { FiShoppingCart } from "react-icons/fi"
 import { BigNumber, ethers } from 'ethers'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs'
-import { FiShoppingCart } from 'react-icons/fi'
 import { deployedCollection } from '../util/NFTCollections'
 
 interface RatingProps {
@@ -65,34 +65,35 @@ const NFTCard: React.FC<INFTCardProps> = ({ tokenId, collectionData }) => {
   }, [])
 
   return (
-    <Flex p={50} w="full" alignItems="center" justifyContent="center">
+    <Flex p={5} alignItems="center" justifyContent="center">
       <Box
         bg={useColorModeValue('white', 'gray.800')}
-        maxW="sm"
+        maxW="min"
         borderWidth="1px"
         rounded="lg"
         shadow="lg"
         position="relative"
       >
-        {/* <Circle size="10px" position="absolute" top={2} right={2} bg="red.200" /> */}
+        <Circle size="10px" position="absolute" top={4} right={4} bg="red.200">
+          <Box d="flex" alignItems="baseline">
+            <Badge letterSpacing={1} rounded="full" px="2" py="1" fontSize="0.8em" colorScheme="red">
+              #{metadata?.tokenId}
+            </Badge>
+          </Box>
+        </Circle>
 
         <Image src={metadata?.image} alt={`Picture of ${metadata?.name}`} roundedTop="lg" />
 
-        <Box p="6">
-          {/* <Box d="flex" alignItems="baseline">
-            <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="red">
-              {metadata?.tokenId}
-            </Badge> */}
-          {/* </Box> */}
-          <Flex mt="1" justifyContent="space-between" alignContent="center">
+        <Box p={6}>
+          <Flex mt={1} justifyContent="space-between" alignContent="center">
             <Box fontSize="2xl" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
               {metadata?.name}
             </Box>
-            <Box fontSize="2xl" color={useColorModeValue('gray.800', 'white')}>
+            <Box ml={4} fontSize="2xl" color={useColorModeValue('gray.800', 'white')}>
               <Box as="span" color={'gray.600'} fontSize="lg">
                 Ξ
               </Box>
-              <Box as="span" ml={1}>
+              <Box as="span" ml={0.5}>
                 {ethers.utils.formatEther(BigNumber.from(collectionData.price.hex).toString())}
               </Box>
             </Box>

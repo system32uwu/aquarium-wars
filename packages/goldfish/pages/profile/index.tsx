@@ -5,7 +5,6 @@ import { useWalletStore } from '../../lib/zustand'
 import { withAuthView } from '../../middleware/withAuth'
 import RenderUserData from '../../components/RenderUserData'
 import { EditIcon, ExternalLinkIcon } from '@chakra-ui/icons'
-import { Input } from '@chakra-ui/input'
 import { deployedCollection, getCollections } from '../../util/NFTCollections'
 import {
   Accordion,

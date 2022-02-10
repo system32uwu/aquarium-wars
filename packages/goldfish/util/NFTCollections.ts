@@ -1,5 +1,3 @@
-import { Interface } from '@ethersproject/abi'
-import { ethers } from 'ethers'
 import { promises } from 'fs'
 
 const { readdir, readFile } = promises

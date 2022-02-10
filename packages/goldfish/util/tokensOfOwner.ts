@@ -5,12 +5,8 @@ export const addressEqual = (a: string, b: string) => {
   return a.toLowerCase() === b.toLowerCase()
 }
 
-export const tokensOfOwner = async (
-  tokenAddress: string,
-  abi: object,
-  account: string
-): Promise<string[]> => {
-  const token = new ethers.Contract(
+export const buildContract = (tokenAddress: string, abi: object) => {
+  return new ethers.Contract(
     tokenAddress,
     new Interface(JSON.stringify(abi)),
     new ethers.providers.JsonRpcProvider(null, {
@@ -18,7 +14,9 @@ export const tokensOfOwner = async (
       name: 'hardhat',
     })
   )
+}
 
+export const tokensOfOwner = async (token: ethers.Contract, account: string): Promise<string[]> => {
   const sentLogs = await token.queryFilter(token.filters.Transfer(null, account))
   const receivedLogs = await token.queryFilter(token.filters.Transfer(account, null))
 
