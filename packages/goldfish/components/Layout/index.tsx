@@ -20,7 +20,7 @@ export default function Layout({ children }) {
         backgroundPosition="center"
         backgroundAttachment="fixed"
         backgroundSize="cover"
-        height="100vh"
+        height="full"
       >
         <Header />
         <main>{children}</main>

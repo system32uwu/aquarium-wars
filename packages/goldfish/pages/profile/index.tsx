@@ -1,43 +1,66 @@
 import * as React from 'react'
-import { Box, Container, Link } from '@chakra-ui/layout'
+import { Box, Container, HStack, Link } from '@chakra-ui/layout'
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs'
 import { useWalletStore } from '../../lib/zustand'
 import { withAuthView } from '../../middleware/withAuth'
 import RenderUserData from '../../components/RenderUserData'
 import { EditIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import { deployedCollection, getCollections } from '../../util/NFTCollections'
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-} from '@chakra-ui/accordion'
 import AQLF from '../../contracts/AquariumLifeForm.sol/AquariumLifeForm.json'
 import NFTCollection from '../../components/NFTCollection'
+import { Input, InputGroup, InputRightElement } from '@chakra-ui/input'
+import { AiFillCheckCircle } from 'react-icons/ai'
+import { IconButton } from '@chakra-ui/button'
 
 interface IProps {
   collections: deployedCollection[]
 }
 
 const Profile: React.FC<IProps> = ({ collections }) => {
-  const { user } = useWalletStore()
+  const { user, setUsername } = useWalletStore()
+
+  const [username, setUsernameLocal] = React.useState<string>(user?.username || '')
+
+  const inputEl = React.useRef(null)
+
+  const onEdit = () => {
+    inputEl.current.focus()
+  }
+
+  React.useEffect(() => {
+    user?.username && setUsernameLocal(user?.username)
+  }, [user])
+
   return (
     <Box justifyContent="center" flex={1} width="full" mt={2} justifyItems="center">
       <Box w="full" p={2} justifyContent="center">
         <RenderUserData user={user} toSeeContent="your profile">
           <Container textAlign="center" rounded="full" p={2}>
-            <Box>
-              {/* <Input
+            <HStack align="center" w="full">
+              <Input
                 color="white"
-                variant="unstyled"
                 placeholder="A cool username"
-                value={user?.username}
-              /> */}
-              {user?.username}
-              <EditIcon></EditIcon>
-            </Box>
-            <span className="text-gray-100 font-thin italic">
+                value={username}
+                onChange={(ev) => setUsernameLocal(ev.target.value)}
+                ref={inputEl}
+                w="full"
+                bgColor="blackAlpha.400"
+                textAlign="center"
+                fontWeight="bold"
+              />
+              {username === user?.username ? (
+                // <EditIcon onClick={onEdit} />
+                <IconButton aria-label="" onClick={onEdit} icon={<EditIcon />} bg="transparent" />
+              ) : (
+                <IconButton
+                  aria-label=""
+                  onClick={() => setUsername(inputEl.current.value)}
+                  icon={<AiFillCheckCircle />}
+                  bg="transparent"
+                />
+              )}
+            </HStack>
+            <span className="text-gray-100 font-semibold italic">
               <Link href={`https://etherscan.io/address/${user?.address}`} isExternal>
                 ({user?.address}) <ExternalLinkIcon mx="2px" />
               </Link>
@@ -56,23 +79,18 @@ const Profile: React.FC<IProps> = ({ collections }) => {
           <TabPanels h="max">
             <TabPanel h="max">
               {/* <p>Show all the collections of NFTs in accordions with the NFTs that the user owns</p> */}
-              <Accordion>
-                {collections.map((c) => (
-                  <AccordionItem key={c.address}>
-                    <h2>
-                      <AccordionButton>
-                        <Box flex="1" textAlign="left">
-                          {c.name} ({c.symbol})
-                        </Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel pb={4}>
-                      <NFTCollection collectionData={c} abi={AQLF.abi} />
-                    </AccordionPanel>
-                  </AccordionItem>
-                ))}
-              </Accordion>
+              {collections.map((c) => (
+                <Box key={c.address}>
+                  <h2>
+                    <Box flex="1" textAlign="left">
+                      {c.name} ({c.symbol})
+                    </Box>
+                  </h2>
+                  <Box pb={4}>
+                    <NFTCollection collectionData={c} abi={AQLF.abi} />
+                  </Box>
+                </Box>
+              ))}
             </TabPanel>
             <TabPanel>
               <p>Show all the battles in which the user fought</p>

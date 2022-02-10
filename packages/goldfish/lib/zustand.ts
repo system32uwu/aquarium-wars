@@ -17,6 +17,7 @@ interface WalletState extends State {
   instance?: Wallet
   message?: string
   user?: PublicUser
+  setUsername: (username: string) => Promise<void>
   connect: (silent: boolean) => Promise<void>
   disconnect: () => Promise<void>
 }
@@ -25,6 +26,19 @@ export const useWalletStore = create<WalletState>((set) => ({
   instance: undefined,
   message: undefined,
   user: undefined,
+  setUsername: async (username: string) => {
+    await fetch('/api/auth/update-username', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: username,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    set((s) => ({ user: { ...s.user, username } }))
+  },
   connect: async (silent = false) => {
     set((_) => ({ message: undefined, instance: undefined, user: undefined }))
 
