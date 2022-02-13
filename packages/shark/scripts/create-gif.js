@@ -2,6 +2,7 @@ const BUILD_COLLECTION = process.argv[2] || undefined
 const { configPath } = require("../imports");
 const makeConfig = require(configPath(BUILD_COLLECTION));
 const {
+  COLLECTION_SYMBOL,
   IMAGES_HEIGHT,
   IMAGES_WIDTH,
   TOTAL_TOKENS,
@@ -51,7 +52,10 @@ const usedTokenIds = new Set();
   const buffer = gifEncoder.out.getData();
   writeFileSync(`${OUTPUT_PATH_IMG}/../preview.gif`, buffer);
 
+  writeFileSync(`${__dirname}/../../goldfish/public/previews/${COLLECTION_SYMBOL}.gif`, buffer);
+
   console.log(
     `Created GIF at ${OUTPUT_PATH_IMG}/../preview.gif width tokenIds: ${tokenIds.join(" ")}`
   );
+
 })();

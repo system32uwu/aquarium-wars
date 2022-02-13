@@ -53,7 +53,7 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
       _supply + _amount <= maxSupply - reserved,
       'Exceeds maximum AQLF supply'
     );
-    require(msg.value < _total, 'Incorrect payment sent');
+    require(msg.value >= _total, 'Incorrect payment sent');
 
     for (uint256 i; i < _amount; i++) {
       _safeMint(msg.sender, _supply + i + 1);

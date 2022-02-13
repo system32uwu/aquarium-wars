@@ -67,7 +67,7 @@ export const useWalletStore = create<WalletState>((set) => ({
           const provider = new ethers.providers.Web3Provider(instance)
           const signer = provider.getSigner()
 
-          const _address = await provider.getSigner().getAddress()
+          const _address = await signer.getAddress()
 
           const nonceRes = await fetch('/api/auth/nonce', {
             method: 'POST',

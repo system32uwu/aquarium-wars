@@ -1,5 +1,5 @@
-import { Box, Wrap, WrapItem } from '@chakra-ui/layout'
-import { BigNumber, ethers } from 'ethers'
+import { Wrap, WrapItem } from '@chakra-ui/layout'
+import { ethers } from 'ethers'
 import * as React from 'react'
 import { useWalletStore } from '../lib/zustand'
 import { deployedCollection } from '../util/NFTCollections'
@@ -18,7 +18,7 @@ const NFTCollection: React.FC<IProps> = ({ collectionData, abi }) => {
   const filter = contract.filters.Transfer(null, user?.address)
 
   React.useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (user) {
         const _tokens = await tokensOfOwner(contract, user?.address)
         setTokens(_tokens)
@@ -43,7 +43,7 @@ const NFTCollection: React.FC<IProps> = ({ collectionData, abi }) => {
     <Wrap justify="center">
       {tokens.map((nft) => (
         <WrapItem key={nft}>
-          <NFTCard tokenId={parseInt(nft)} collectionData={collectionData} />
+          <NFTCard tokenId={parseInt(nft)} collectionData={collectionData} state="Owned" />
         </WrapItem>
       ))}
     </Wrap>

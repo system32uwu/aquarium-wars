@@ -23,6 +23,7 @@ const fs = require('fs')
 const { create, globSource } = require('ipfs-http-client')
 
 const { update } = require('./update-base-uri')
+const { copy } = require('fs-extra')
 
 const deployResult = (imgCID, metaCID) => `
 # Deployed succesfully to IPFS!

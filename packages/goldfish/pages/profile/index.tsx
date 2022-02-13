@@ -8,7 +8,7 @@ import { EditIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import { deployedCollection, getCollections } from '../../util/NFTCollections'
 import AQLF from '../../contracts/AquariumLifeForm.sol/AquariumLifeForm.json'
 import NFTCollection from '../../components/NFTCollection'
-import { Input, InputGroup, InputRightElement } from '@chakra-ui/input'
+import { Input } from '@chakra-ui/input'
 import { AiFillCheckCircle } from 'react-icons/ai'
 import { IconButton } from '@chakra-ui/button'
 
@@ -82,9 +82,7 @@ const Profile: React.FC<IProps> = ({ collections }) => {
               {collections.map((c) => (
                 <Box key={c.address}>
                   <h2>
-                    <Box flex="1" textAlign="left">
-                      {c.name} ({c.symbol})
-                    </Box>
+                    {c.name} ({c.symbol})
                   </h2>
                   <Box pb={4}>
                     <NFTCollection collectionData={c} abi={AQLF.abi} />

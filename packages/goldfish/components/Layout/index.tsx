@@ -7,13 +7,13 @@ export default function Layout({ children }) {
   const { connect } = useWalletStore()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       console.log('connecting')
       await connect(true)
     })() //try to connect wallet silently if the user has logged in previously so they don't have to click Connect button on every page refresh
   }, [])
   return (
-    <>
+    <Box flex={1} height="100vh">
       <Box
         backgroundImage="url('/bg1.jpg')"
         backgroundRepeat="no-repeat"
@@ -26,6 +26,6 @@ export default function Layout({ children }) {
         <main>{children}</main>
         {/* <Footer /> */}
       </Box>
-    </>
+    </Box>
   )
 }

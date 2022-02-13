@@ -5,14 +5,16 @@ export const addressEqual = (a: string, b: string) => {
   return a.toLowerCase() === b.toLowerCase()
 }
 
-export const buildContract = (tokenAddress: string, abi: object) => {
+export const buildContract = (tokenAddress: string, abi: object, provider?) => {
+  const _provider = new ethers.providers.JsonRpcProvider(null, {
+    chainId: 1337,
+    name: 'hardhat',
+  })
+
   return new ethers.Contract(
     tokenAddress,
     new Interface(JSON.stringify(abi)),
-    new ethers.providers.JsonRpcProvider(null, {
-      chainId: 1337,
-      name: 'hardhat',
-    })
+    provider || _provider
   )
 }
 
