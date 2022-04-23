@@ -2,7 +2,6 @@ services:
   postgres:
     container_name: 'db'
     image: 'postgres:latest'
-    restart: always
     ports:
       - '15432:5432'
     networks:
@@ -20,7 +19,6 @@ services:
 
   pgadmin4:
     image: 'dpage/pgadmin4'
-    restart: always
     ports:
       - '5050:80'
     depends_on:
@@ -31,42 +29,33 @@ services:
     networks:
       - app-tier
 
-  ipfs: # The interplanetary file system where the NFTs metadata and images are hosted
-    image: ipfs/go-ipfs:latest
-    environment:
-      - IPFS_PROFILE=server
-      - IPFS_PATH=/ipfsdata
-    volumes:
-      - /ipfs/data:/ipfsdata
-    ports:
-      - '4001:4001'
-      - '127.0.0.1:8080:8080'
-      - '127.0.0.1:5001:5001'
-
-  salmon-goldfish:
+  monorepo:
     build:
       context: ./
       dockerfile: Dockerfile
-    restart: always
-    command: bash -c "yarn salmon dev & yarn goldfish dev"
+    command: bash -c "yarn run-all"
     volumes:
       - /app/node_modules
 
       - ./packages/goldfish:/app/packages/goldfish
-      - /app/packages/goldfish/contracts
+      - ./packages/goldfish/contracts:/app/packages/goldfish/contracts
       - /app/packages/goldfish/node_modules
       - /app/packages/goldfish/.next
 
+      - ./packages/whale:/app/packages/whale
+      - /app/packages/whale/node_modules
+
       - ./packages/salmon:/app/packages/salmon
-      - ./packages/salmon/collections-data:/app/packages/salmon/collections-data
+      - ./packages/salmon/collections:/app/packages/salmon/collections
       - /app/packages/salmon/node_modules
+
+      - ./packages/shark:/app/packages/shark
+      - ./packages/shark/collections:/app/packages/shark/collections
+      - /app/packages/shark/node_modules
 
     ports:
       - '0.0.0.0:8545:8545'
-      - '0.0.0.0:80:3000'
-
-    networks:
-      - app-tier
+      - '0.0.0.0:3000:3000'
 
     depends_on:
       - postgres
@@ -77,43 +66,12 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db/aquarium-wars
       - SHADOW_DATABASE_URL=postgres://postgres:postgres@db/shadow_db
+      - IPFS_API=/ip4/127.0.0.1/tcp/5001
 
-  # salmon: # Smart Contracts
-  #   build:
-  #     context: ./packages/salmon
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   command: yarn run dev
-  #   volumes:
-  #     - ./packages/salmon:/app
-  #     - ./packages/salmon/collections-data:/app/collections-data
-  #     - /app/node_modules
-  #   ports:
-  #     - '0.0.0.0:8545:8545'
-
-  # goldfish: # Website
-  #   build:
-  #     context: ./packages/goldfish
-  #     dockerfile: Dockerfile
-  #   networks:
-  #     - app-tier
-  #   command: yarn run dev
-  #   ports:
-  #     - '80:3000'
-  #   volumes:
-  #     - ./packages/goldfish:/app
-  #     - /app/contracts
-  #     - /app/node_modules
-  #     - /app/.next
-  #   depends_on:
-  #     - salmon
-  #     - postgres
-  #   env_file:
-  #     - ./packages/goldfish/.env
-  #   environment:
-  #     - DATABASE_URL=postgres://postgres:postgres@db/aquarium-wars
-  #     - SHADOW_DATABASE_URL=postgres://postgres:postgres@db/shadow_db
+    networks:
+      - app-tier
 
 networks:
   app-tier:
     driver: bridge
+

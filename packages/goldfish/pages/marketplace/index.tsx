@@ -1,10 +1,9 @@
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import * as React from 'react'
-import MintCollection from '../../components/MintCollection'
-import NFTCollection from '../../components/NFTCollection'
-import AQLF from '../../contracts/AquariumLifeForm.sol/AquariumLifeForm.json'
-import { withAuthView } from '../../middleware/withAuth'
-import { deployedCollection, getCollections } from '../../util/NFTCollections'
+import MintCollection from '@components/MintCollection'
+import AQLF from '@contracts/abis/AquariumLifeForm.json'
+import { withAuthView } from '@middleware/withAuth'
+import { deployedCollection, getCollections } from '@util/NFTCollections'
 
 interface IProps {
     collections: deployedCollection[]

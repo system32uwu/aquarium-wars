@@ -1,11 +1,11 @@
-import { prisma } from '../lib/prisma'
+import { prisma } from '@aquarium-wars/whale'
 import {
   GetServerSidePropsContext,
   NextApiRequest,
   NextApiResponse,
 } from 'next'
 import Cookies from 'cookies'
-import { PublicUser } from '../lib/types'
+import { PublicUser } from '@lib/types'
 
 export interface IWithAuthReq extends NextApiRequest {
   user?: PublicUser

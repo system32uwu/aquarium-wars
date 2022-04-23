@@ -1,13 +1,13 @@
 import { exec } from 'child_process'
 import { readdir, readFile } from 'fs-extra'
 
-// read all files in collections-data
+// read all files in collections
 // run yarn deploy-nft ${f} where f is the json data of the created collection that comes from shark
 
 const main = async () => {
-  const dirname = `${process.cwd()}/collections-data`
+  const dirname = `${process.cwd()}/collections`
   const fileNames = await readdir(dirname)
-
+  console.log("collections are: ", fileNames)
   for (const fileName of fileNames) {
     const file = await readFile(`${dirname}/${fileName}`, 'utf8')
     let data = JSON.parse(file)

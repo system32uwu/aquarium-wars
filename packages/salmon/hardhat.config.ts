@@ -5,11 +5,15 @@ import '@typechain/hardhat'
 import 'hardhat-gas-reporter'
 import 'solidity-coverage'
 
-// import { promises as fs } from 'fs'
-import { writeFile, copy, mkdirp } from 'fs-extra'
+import { writeFile, mkdirp, readdir, copy } from 'fs-extra'
 import { parseUnits } from '@ethersproject/units'
+import { join } from 'path'
 
 require('dotenv').config()
+
+const deployedCollectionsDir = `${__dirname}/../goldfish/contracts/deployedCollections`
+const deployedCurrenciesDir = `${__dirname}/../goldfish/contracts/deployedCurrencies`
+const abisDir = `${__dirname}/../goldfish/contracts/abis`
 
 task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners()
@@ -41,6 +45,19 @@ task('deploy-currency', 'Deploys your ERC-20 in-game token')
     await plank.deployed()
 
     console.log('$PLANK deployed to:', plank.address)
+
+    await mkdirp(deployedCurrenciesDir)
+
+    await writeFile(
+      `${deployedCurrenciesDir}/${await plank.symbol()}.json`,
+      JSON.stringify(
+        {
+          address: plank.address,
+        },
+        null,
+        2
+      )
+    )
   })
 
 task('deploy-nft', 'Deploys a new NFT collection')
@@ -73,7 +90,7 @@ task('deploy-nft', 'Deploys a new NFT collection')
     false
   )
   .addPositionalParam(
-    'maxmint',
+    'maxMint',
     'Max amount allowed to be minted at once',
     undefined,
     types.int,
@@ -95,7 +112,7 @@ task('deploy-nft', 'Deploys a new NFT collection')
   )
   .setAction(
     async (
-      { baseUri, name, symbol, price, maxmint, reserved, supply },
+      { baseUri, name, symbol, price, maxMint, reserved, supply },
       hre
     ) => {
       price = parseUnits(price, 'ether')
@@ -105,7 +122,7 @@ task('deploy-nft', 'Deploys a new NFT collection')
         name,
         symbol,
         price,
-        maxmint,
+        maxMint,
         reserved,
         supply
       )
@@ -114,19 +131,17 @@ task('deploy-nft', 'Deploys a new NFT collection')
 
       console.log(`${await aqlf.symbol()} deployed to:`, aqlf.address)
 
-      const deployedContractsDataDir = `${__dirname}/../goldfish/deployed-contracts`
-
-      await mkdirp(deployedContractsDataDir)
+      await mkdirp(deployedCollectionsDir)
 
       await writeFile(
-        `${deployedContractsDataDir}/deployed-${symbol}.json`,
+        `${deployedCollectionsDir}/${symbol}.json`,
         JSON.stringify(
           {
             baseUri,
             name,
             symbol,
             price,
-            maxmint,
+            maxMint,
             reserved,
             supply,
             address: aqlf.address,
@@ -136,10 +151,7 @@ task('deploy-nft', 'Deploys a new NFT collection')
         )
       )
 
-      console.log(
-        'saved to:',
-        `${deployedContractsDataDir}/deployed-${symbol}.json`
-      )
+      console.log('saved to:', `${deployedCollectionsDir}/${symbol}.json`)
       await aqlf.pause(false)
     }
   )
@@ -150,16 +162,19 @@ task(
   async (_, __, runSuper) => {
     await runSuper() // compile
 
-    const to = `${__dirname}/../goldfish/contracts`
-    const from = `${__dirname}/artifacts/contracts`
+    const baseDir = `${__dirname}/artifacts/contracts`
 
-    await copy(from, to, {
-      overwrite: true,
-      recursive: true,
-      filter: (path) => {
-        return path.indexOf('.dbg.json') === -1 // filter out debug files
-      },
-    }) // copy over to goldfish
+    const containerDirs = await readdir(baseDir)
+
+    for (let dir of containerDirs) {
+      await copy(join(baseDir, dir), abisDir, {
+        overwrite: true,
+        recursive: true,
+        filter: (path) => {
+          return path.indexOf('.dbg.json') === -1 // filter out debug files
+        },
+      }) // copy over to goldfish
+    }
   }
 )
 

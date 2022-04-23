@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next'
-import { prisma } from '../../../lib/prisma'
+import { prisma } from '@aquarium-wars/whale'
 import { IWithAuthReq, withAuthApi } from '../../../middleware/withAuth'
 
 const updateUsernameApi = async (req: IWithAuthReq, res: NextApiResponse) => {

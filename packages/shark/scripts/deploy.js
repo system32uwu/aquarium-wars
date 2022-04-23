@@ -23,7 +23,6 @@ const fs = require('fs')
 const { create, globSource } = require('ipfs-http-client')
 
 const { update } = require('./update-base-uri')
-const { copy } = require('fs-extra')
 
 const deployResult = (imgCID, metaCID) => `
 # Deployed succesfully to IPFS!
@@ -104,7 +103,7 @@ To view a specific metadata file, head over to ${_GATEWAY}/${metaCID}/ID where I
     console.log(fs.readFileSync(`${OUTPUT_PATH}/../deploy.md`, { encoding: 'utf-8' }))
 
     fs.writeFileSync(
-      `${__dirname}/../../salmon/collections-data/${COLLECTION_SYMBOL}.json`,
+      `${__dirname}/../../salmon/collections/${COLLECTION_SYMBOL}.json`,
       JSON.stringify(
         {
           baseUri: `ipfs:///${metadataDirCID}`,

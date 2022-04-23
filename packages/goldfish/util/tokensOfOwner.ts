@@ -1,21 +1,7 @@
-import { Interface } from '@ethersproject/abi'
 import { ethers } from 'ethers'
 
 export const addressEqual = (a: string, b: string) => {
   return a.toLowerCase() === b.toLowerCase()
-}
-
-export const buildContract = (tokenAddress: string, abi: object, provider?) => {
-  const _provider = new ethers.providers.JsonRpcProvider(null, {
-    chainId: 1337,
-    name: 'hardhat',
-  })
-
-  return new ethers.Contract(
-    tokenAddress,
-    new Interface(JSON.stringify(abi)),
-    provider || _provider
-  )
 }
 
 export const tokensOfOwner = async (token: ethers.Contract, account: string): Promise<string[]> => {
@@ -25,10 +11,10 @@ export const tokensOfOwner = async (token: ethers.Contract, account: string): Pr
   const logs = sentLogs
     .concat(receivedLogs)
     .sort((a, b) => a.blockNumber - b.blockNumber || a.transactionIndex - b.transactionIndex)
-
   let owned = new Set<string>()
 
   for (const log of logs) {
+    console.log(log.args)
     const { from, to, tokenId } = log.args
 
     if (addressEqual(account, to)) {
@@ -41,3 +27,5 @@ export const tokensOfOwner = async (token: ethers.Contract, account: string): Pr
 
   return ownedReturn
 }
+
+export default tokensOfOwner;

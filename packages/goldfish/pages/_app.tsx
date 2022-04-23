@@ -1,7 +1,8 @@
 import { AppProps } from 'next/app'
-import Layout from '../components/Layout'
+import Layout from '@components/Layout'
 import { ChakraProvider } from '@chakra-ui/react'
-import '../styles/globals.scss'
+import '@styles/globals.scss'
+import 'react-toastify/dist/ReactToastify.css'
 
 const App = ({ Component, pageProps: { ...pageProps } }: AppProps) => {
   return (

@@ -24,9 +24,9 @@ import {
 import { BigNumber, ethers } from 'ethers'
 import React, { useEffect, useState } from 'react'
 import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs'
-import { useWalletStore } from '../lib/zustand'
-import { deployedCollection } from '../util/NFTCollections'
-import { buildContract } from '../util/tokensOfOwner'
+import { useWalletStore } from '@lib/zustand'
+import { deployedCollection } from '@util/NFTCollections'
+import { buildContract, mintAQLF } from '@util/web3'
 
 interface RatingProps {
   rating: number
@@ -59,7 +59,7 @@ const Rating: React.FC<RatingProps> = ({ rating }) => {
 }
 
 interface MintModalProps {
-  collectionData: deployedCollection,
+  collectionData: deployedCollection
   abi: object
 }
 
@@ -69,33 +69,20 @@ const MintModal: React.FC<MintModalProps> = ({ collectionData, abi }) => {
   const { instance } = useWalletStore()
   const toast = useToast()
 
-  const format = (val) => `Ξ ` + val
-  const price = parseFloat(ethers.utils.formatEther(BigNumber.from(collectionData.price.hex).toString()))
+  const format = (val: number) => `Ξ ` + val
+  const price = parseFloat(
+    ethers.utils.formatEther(BigNumber.from(collectionData.price.hex).toString())
+  )
 
   const onMint = async (amount: number) => {
-    const contract = buildContract(collectionData.address, abi)
+    await mintAQLF(collectionData.address, abi, amount, price, instance.provider)
 
-    const total = amount * Math.round(price * 100) / 100
-
-    const signer = contract.connect(instance.provider.getSigner())
-
-    const nftTx = await signer.mintAQLF(amount, {
-      value: ethers.utils.parseEther(total.toString()),
-    })
-
-    const tx = await nftTx.wait()
-
-    let event = tx.events[0]
-    let value = event.args[2]
-
-    console.log(event, value)
-    // TODO: show a status message "NFTs minted succesfully" 
     toast({
       title: 'NFT(s) minted succesfully.',
       description: <a href="/profile">Head to your profile to see the minted NFTs!</a>,
       status: 'success',
       duration: 9000,
-      isClosable: true
+      isClosable: true,
     })
   }
 
@@ -103,16 +90,12 @@ const MintModal: React.FC<MintModalProps> = ({ collectionData, abi }) => {
     <>
       <Button onClick={onOpen}>Mint</Button>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Mint {collectionData.symbol}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-
             <NumberInput
               onChange={(valueString) => setAmount(parseInt(valueString))}
               value={amount}
@@ -125,13 +108,11 @@ const MintModal: React.FC<MintModalProps> = ({ collectionData, abi }) => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-            <Box p={2}>
-              Total: {format(amount * Math.round(price * 100) / 100)}
-            </Box>
+            <Box p={2}>Total: {format((amount * Math.round(price * 100)) / 100)}</Box>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={() => onMint(amount || 1)}>
+            <Button colorScheme="blue" mr={3} onClick={() => onMint(amount || 1)}>
               Mint
             </Button>
             <Button onClick={onClose}>Cancel</Button>
@@ -142,7 +123,7 @@ const MintModal: React.FC<MintModalProps> = ({ collectionData, abi }) => {
   )
 }
 
-export type NFTState = "Mintable" | "OnSale" | "Owned"
+export type NFTState = 'Mintable' | 'OnSale' | 'Owned'
 
 interface INFTCardProps {
   tokenId?: number
@@ -155,8 +136,8 @@ const NFTCard: React.FC<INFTCardProps> = ({ tokenId, collectionData, state, abi 
   const [metadata, setMetadata] = useState<any | null>(null)
 
   useEffect(() => {
-    ; (async () => {
-      if (state === "OnSale" || state === "Owned") {
+    ;(async () => {
+      if (state === 'OnSale' || state === 'Owned') {
         const _metadataRes = await fetch(
           `${collectionData.baseUri.replace('ipfs:///', 'http://localhost:8080/ipfs/')}/${tokenId}`
         )
@@ -164,9 +145,9 @@ const NFTCard: React.FC<INFTCardProps> = ({ tokenId, collectionData, state, abi 
         setMetadata(_metadata)
       } else {
         setMetadata({
-          "tokenId": "?",
-          "name": `${collectionData.name} #?`,
-          "image": `/previews/${collectionData.symbol}.gif`
+          tokenId: '?',
+          name: `${collectionData.name} #?`,
+          image: `/previews/${collectionData.symbol}.gif`,
         })
       }
     })()
@@ -184,7 +165,14 @@ const NFTCard: React.FC<INFTCardProps> = ({ tokenId, collectionData, state, abi 
       >
         <Circle size="10px" position="absolute" top={4} right={4} bg="red.200">
           <Box d="flex" alignItems="baseline">
-            <Badge letterSpacing={1} rounded="full" px="2" py="1" fontSize="0.8em" colorScheme="red">
+            <Badge
+              letterSpacing={1}
+              rounded="full"
+              px="2"
+              py="1"
+              fontSize="0.8em"
+              colorScheme="red"
+            >
               #{metadata?.tokenId}
             </Badge>
           </Box>
@@ -205,23 +193,23 @@ const NFTCard: React.FC<INFTCardProps> = ({ tokenId, collectionData, state, abi 
                 {ethers.utils.formatEther(BigNumber.from(collectionData.price.hex).toString())}
               </Box>
             </Box>
-            {
-              state !== "Owned" ? <Box
-                label={state === "Mintable" ? "Mint" : "Buy"}
+            {state !== 'Owned' ? (
+              <Box
+                label={state === 'Mintable' ? 'Mint' : 'Buy'}
                 bg="white"
                 placement={'top'}
                 color={'gray.800'}
                 fontSize={'1.2em'}
               >
                 <MintModal collectionData={collectionData} abi={abi} />
-              </Box> : null
-            }
+              </Box>
+            ) : null}
           </Flex>
-          {
-            state !== "Mintable" ? <Flex justifyContent="space-between" alignContent="center">
+          {state !== 'Mintable' ? (
+            <Flex justifyContent="space-between" alignContent="center">
               <Rating rating={3} numReviews={4} />
-            </Flex> : null
-          }
+            </Flex>
+          ) : null}
         </Box>
       </Box>
     </Flex>

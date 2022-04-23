@@ -1,10 +1,11 @@
 import { Wrap, WrapItem } from '@chakra-ui/layout'
 import { ethers } from 'ethers'
 import * as React from 'react'
-import { useWalletStore } from '../lib/zustand'
-import { deployedCollection } from '../util/NFTCollections'
-import { buildContract, tokensOfOwner } from '../util/tokensOfOwner'
+import { useWalletStore } from '@lib/zustand'
+import { deployedCollection } from '@util/NFTCollections'
+import { tokensOfOwner } from '@util/tokensOfOwner'
 import NFTCard from './NFTCard'
+import { buildContract } from '@util/web3'
 
 interface IProps {
   collectionData: deployedCollection
@@ -18,7 +19,7 @@ const NFTCollection: React.FC<IProps> = ({ collectionData, abi }) => {
   const filter = contract.filters.Transfer(null, user?.address)
 
   React.useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (user) {
         const _tokens = await tokensOfOwner(contract, user?.address)
         setTokens(_tokens)
@@ -43,7 +44,12 @@ const NFTCollection: React.FC<IProps> = ({ collectionData, abi }) => {
     <Wrap justify="center">
       {tokens.map((nft) => (
         <WrapItem key={nft}>
-          <NFTCard tokenId={parseInt(nft)} collectionData={collectionData} state="Owned" />
+          <NFTCard
+            tokenId={parseInt(nft)}
+            collectionData={collectionData}
+            state="Owned"
+            abi={abi}
+          />
         </WrapItem>
       ))}
     </Wrap>

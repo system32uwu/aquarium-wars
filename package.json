@@ -10,7 +10,10 @@
     "goldfish": "yarn workspace @aquarium-wars/goldfish",
     "whale": "yarn workspace @aquarium-wars/whale",
     "shark": "yarn workspace @aquarium-wars/shark",
-    "run-all": "yarn salmon hardhat compile && yarn salmon hardhat node & yarn goldfish dev"
+    "run-all": "yarn whale gen+build+migrate && yarn salmon dev & sleep 20 && yarn salmon deploy-currency 20000000 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 && yarn salmon deploy-collections && yarn goldfish dev",
+    "ipfs:start": "docker run -d --name ipfs-host -e IPFS_PROFILE=local-discovery -v /ipfs/staging:/export -v /ipfs/data:/data/ipfs -p 4001:4001 -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 --rm ipfs/go-ipfs:latest || docker container restart ipfs-host",
+    "run:docker": "docker-compose up --remove-orphans",
+    "start": "yarn ipfs:start && yarn shark bite MutantAnchovies && yarn run:docker"
   },
   "devDependencies": {
     "@types/node": "^17.0.10",

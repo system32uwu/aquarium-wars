@@ -15,9 +15,9 @@ export type deployedCollection = {
 }
 
 export const getCollections = async (): Promise<deployedCollection[]> => {
-  console.log('reading from:', `${process.cwd()}/deployed-contracts`)
+  console.log('reading from:', `${process.cwd()}/contracts/deployedCollections`)
   let collections: deployedCollection[] = []
-  const dirname = `${process.cwd()}/deployed-contracts`
+  const dirname = `${process.cwd()}/contracts/deployedCollections`
   const fileNames = await readdir(dirname)
 
   for (const fileName of fileNames) {

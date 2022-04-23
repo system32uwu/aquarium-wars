@@ -18,7 +18,7 @@ const makeConfig = (BUILD_COLLECTION) => {
 
     TOKEN_NAME_PREFIX: "Mutant Anchovy #",
     TOKEN_DESCRIPTION: "A Mutant Anchovy that belongs to the Aquarium.",
-    TOTAL_TOKENS: 100,
+    TOTAL_TOKENS: 10,
     RESERVED_TOKENS: 1,
 
     MINT_PRICE: 0.1,
@@ -32,7 +32,7 @@ const makeConfig = (BUILD_COLLECTION) => {
     IMAGES_BASE_URI: "",
     UPLOAD_API_ENDPOINT: "",
 
-    GIF_FRAMES: 36,
+    GIF_FRAMES: 5,
   };
 
   config.ORDERED_TRAITS_LIST = [

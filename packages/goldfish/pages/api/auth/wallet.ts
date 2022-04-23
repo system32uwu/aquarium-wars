@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '../../../lib/prisma'
-import { buildNonceMessage } from '../../../util/web3'
+import { prisma } from '@aquarium-wars/whale'
+import { buildNonceMessage } from '@util/web3'
 import { ethers } from 'ethers'
 import Cookies from 'cookies'
 

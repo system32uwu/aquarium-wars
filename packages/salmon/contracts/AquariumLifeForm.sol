@@ -1,6 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 
@@ -10,6 +11,7 @@ import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 
 contract AquariumLifeForm is ERC721Enumerable, Ownable {
   using Strings for uint256;
+  using SafeMath for uint256;
 
   string public baseTokenURI;
   uint256 public price;
