@@ -8,7 +8,7 @@ Run the tests, I said run them damn it! `yarn hardhat test`
 
 Run a local ethereum blockchain node: `yarn hardhat node`
 
-Run `yarn hardhat deploy-currency --network localhost 20000000 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266` to deploy your currency!
+Run `yarn hardhat deploy-plank --network localhost 20000000 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266` to deploy your currency!
 
 Then you can either connect through metamask or use the hardhat CLI to play around with the token.
 

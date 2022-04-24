@@ -7,7 +7,6 @@ import {
   Plankton,
   Plankton__factory,
 } from '../typechain'
-import { parsedDecimalValue } from '../util'
 
 const prefix = '[AquariumLifeForm]'
 
@@ -30,30 +29,36 @@ describe(`${prefix} Contract`, () => {
   beforeEach(async () => {
     ;[owner, addr1, mockPlayer, mockPlayer2, addrs] =
       await ethers.getSigners()
-    console.log('owner')
 
-    AquariumLifeForm = (await ethers.getContractFactory(
-      'AquariumLifeForm'
-    )) as AquariumLifeForm__factory
+    Plankton = await ethers.getContractFactory('Plankton')
+    plankton = await Plankton.deploy(planktonInitialSupply, owner.address)
+
+    await plankton.deployed()
+
+    AquariumLifeForm = await ethers.getContractFactory('AquariumLifeForm')
 
     let AQMA = await AquariumLifeForm.deploy(
       'http://127.0.0.1/api/aqlf/AQMA', // uri
       'Mutant Anchovies', // name
       'AQMA', // symbol
-      ethers.utils.parseUnits('1', 'ether'), // mint cost
-      20, // max to batch mint
-      100, // reserved for giveaways
-      10000 // 10k AQMA
+      ethers.utils.parseUnits('0.1', 'ether'), // mint cost
+      "20", // max to batch mint
+      "100", // reserved for giveaways
+      "10000", // 10k AQMA
+      plankton.address,
+      "100"
     )
 
     let AQRS = await AquariumLifeForm.deploy(
       'http://127.0.0.1/api/aqlf/aqrs', // uri
       'Robo Sharkies', // name
       'AQRS', // symbol
-      parsedDecimalValue(0.1), // mint cost
-      20, // max to batch mint
-      100, // reserved for giveaways
-      7500 // 7.5k AQRS
+      ethers.utils.parseUnits('0.5', 'ether'), // mint cost
+      "20", // max to batch mint
+      "10", // reserved for giveaways
+      "7500", // 10k AQMA
+      plankton.address,
+      "150"
     )
 
     aquariumLifeForms.push(AQMA)
@@ -62,21 +67,21 @@ describe(`${prefix} Contract`, () => {
     await AQMA.deployed()
     await AQRS.deployed()
 
-    Plankton = (await ethers.getContractFactory(
-      'Plankton'
-    )) as Plankton__factory
-    plankton = await Plankton.deploy(planktonInitialSupply, owner.address)
-
-    await plankton.deployed()
   })
 
   describe(`${prefix} - Mint AQMA`, () => {
     it('Should mint 20 NFTs', async () => {
       let amount = 20
+      let unitCost = await aquariumLifeForms[0].price()
+
+      const total =
+        parseFloat(ethers.utils.formatEther(unitCost.toString())) * amount
 
       await aquariumLifeForms[0].pause(false) // marketplace opening
 
-      await aquariumLifeForms[0].connect(mockPlayer).mintAQLF(amount)
+      await aquariumLifeForms[0].connect(mockPlayer).mintAQLF(amount, {
+        value: ethers.utils.parseUnits(total.toString(), 'ether'),
+      })
 
       expect(
         await aquariumLifeForms[0].totalSupply(),
@@ -87,20 +92,6 @@ describe(`${prefix} Contract`, () => {
         await aquariumLifeForms[0].balanceOf(mockPlayer.address),
         'AQMA #1 - #20 werent delivered'
       ).to.equal(amount)
-    })
-  })
-
-  describe(`${prefix} - Feed AQMA with PLANK`, () => {
-    it(`Should burn ${feedAmount} PLANK and update AQMA battleCountSinceFed`, async () => {
-      await plankton
-        .connect(owner)
-        .burnPlanktons(parsedDecimalValue(feedAmount))
-      // TODO: mock API call to update the battleCountSinceFed
-
-      expect(
-        await plankton.totalSupply(),
-        'Plankton wasnt burned'
-      ).to.equal(parsedDecimalValue(planktonInitialSupply - feedAmount))
     })
   })
 })

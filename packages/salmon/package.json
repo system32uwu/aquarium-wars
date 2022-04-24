@@ -8,7 +8,7 @@
     "dev": "hardhat compile && hardhat node",
     "console": "hardhat console --network localhost",
     "test": "hardhat test",
-    "deploy-currency": "hardhat deploy-currency --network localhost",
+    "deploy-plank": "hardhat deploy-plank --network localhost",
     "deploy-nft": "hardhat deploy-nft --network localhost",
     "compile": "hardhat && hardhat compile",
     "accounts": "hardhat accounts",

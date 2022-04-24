@@ -14,6 +14,7 @@ const {
   RESERVED_TOKENS,
   MINT_PRICE,
   MAX_MINT,
+  FEED_FEE
 } = makeConfig(BUILD_COLLECTION)
 
 const _GATEWAY = GATEWAY || 'https://ipfs.io/ipfs'
@@ -113,6 +114,7 @@ To view a specific metadata file, head over to ${_GATEWAY}/${metaCID}/ID where I
           maxmint: MAX_MINT,
           reserved: RESERVED_TOKENS,
           supply: TOTAL_TOKENS,
+          feedFee: FEED_FEE
         },
         null,
         2

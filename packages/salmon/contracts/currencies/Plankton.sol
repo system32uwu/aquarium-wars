@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-/// @title Plankton Token, the currency for Fish Wars
+/// @title Plankton Token, the in-game currency for Aquarium Wars
 /// @author Mateo Carriqui
 /// @notice Mint and Burn Planktons
 
@@ -24,7 +24,7 @@ contract Plankton is ERC20, Ownable {
   constructor(uint256 _initialSupply, address _beneficiary)
     ERC20("Plankton", "PLANK")
   {
-    _mint(_beneficiary, _initialSupply * 10**uint256(decimals()));
+    _mint(_beneficiary, _initialSupply);
     initialSupply = _initialSupply;
   }
 

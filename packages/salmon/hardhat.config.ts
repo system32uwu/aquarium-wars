@@ -23,7 +23,7 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
   }
 })
 
-task('deploy-currency', 'Deploys your ERC-20 in-game token')
+task('deploy-plank', 'Deploys the main ERC-20 in-game token')
   .addPositionalParam(
     'supply',
     'Initial Supply',
@@ -43,8 +43,13 @@ task('deploy-currency', 'Deploys your ERC-20 in-game token')
     const plank = await PLANK.deploy(supply, beneficiary)
 
     await plank.deployed()
+    const balance = await plank.balanceOf(beneficiary)
 
     console.log('$PLANK deployed to:', plank.address)
+    console.log(
+      '$PLANK balance is:',
+      hre.ethers.utils.formatEther(balance.toString())
+    )
 
     await mkdirp(deployedCurrenciesDir)
 
@@ -110,12 +115,31 @@ task('deploy-nft', 'Deploys a new NFT collection')
     types.int,
     false
   )
+  .addPositionalParam('feedFee', 'Feed fee', undefined, types.int, false)
+  .addPositionalParam(
+    'plank',
+    'PLANK address',
+    undefined,
+    types.string,
+    false
+  )
   .setAction(
     async (
-      { baseUri, name, symbol, price, maxMint, reserved, supply },
+      {
+        baseUri,
+        name,
+        symbol,
+        price,
+        maxMint,
+        reserved,
+        supply,
+        plank,
+        feedFee,
+      },
       hre
     ) => {
       price = parseUnits(price, 'ether')
+
       const AQLF = await hre.ethers.getContractFactory('AquariumLifeForm')
       const aqlf = await AQLF.deploy(
         baseUri,
@@ -124,7 +148,9 @@ task('deploy-nft', 'Deploys a new NFT collection')
         price,
         maxMint,
         reserved,
-        supply
+        supply,
+        plank,
+        feedFee
       )
 
       await aqlf.deployed()

@@ -1,9 +1,10 @@
 {
-  "baseUri": "ipfs:///Qme6z3Amef9ZZyF6Wio2A5irwUNKmSEESgKAwDbbyEqWnY",
+  "baseUri": "ipfs:///QmNkZNMEuyaTyzv2Q5ndxC3iMYfRpZSYXWdLo77HE4bHmm",
   "name": "Mutant Anchovies",
   "symbol": "AQMA",
   "price": 0.1,
   "maxmint": 20,
   "reserved": 1,
-  "supply": 10
+  "supply": 10,
+  "feedFee": 100
 }

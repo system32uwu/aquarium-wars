@@ -29,15 +29,17 @@ const genConfig = `const makeConfig = (BUILD_COLLECTION) => {
   
     // Update the variables below according to the collection you want to generate, let the ones aboves untouched unless you know what you're doing
     COLLECTION_NAME: "${BUILD_COLLECTION}",
-    COLLECTION_SYMBOL: "NFT"
+    COLLECTION_SYMBOL: "NFT",
 
     TOKEN_NAME_PREFIX: "${BUILD_COLLECTION} #",
     TOKEN_DESCRIPTION: "This NFT Belongs to the ${BUILD_COLLECTION} collection.",
     TOTAL_TOKENS: 100,
     RESERVED_TOKENS: 1,
 
-    MINT_PRICE: "0.1 ether",
+    MINT_PRICE: 0.1,
     MAX_MINT: 20,
+
+    FEED_FEE: 100,
   
     IMAGES_HEIGHT: 1080,
     IMAGES_WIDTH: 1080,

@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 /// @title AquariumLifeForms, NFTs representing organisms of the Aquarium
 /// @author Mateo Carriqui
@@ -20,6 +21,12 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
   uint256 public reserved;
   bool public paused = true;
 
+  IERC20 public PLANK;
+  uint256 public feedFee;
+
+  /// @notice costs 100 PLANK per battle
+  mapping(uint256 => uint8) public battlesLeft;
+
   /**
    * @param _baseTokenURI the ipfs url that points to the metadata files
    * @param _name the name for this collection of NFTs
@@ -27,6 +34,8 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
    * @param _mintPrice the price for minting an NFT
    * @param _maxMint the maximum amount of NTFs that can be minted at once
    * @param _reserved amount reserved for giveaways / prizes
+   * @param _plank address of PLANK token
+   * @param _feedFee amount of PLANK required to battle again
    */
 
   constructor(
@@ -36,13 +45,17 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
     uint256 _mintPrice,
     uint256 _maxMint,
     uint256 _reserved,
-    uint256 _maxSupply
+    uint256 _maxSupply,
+    address _plank,
+    uint256 _feedFee
   ) ERC721(_name, _symbol) {
     baseTokenURI = _baseTokenURI;
     setMintPrice(_mintPrice);
     maxMint = _maxMint;
     maxSupply = _maxSupply;
     reserved = _reserved;
+    PLANK = IERC20(_plank);
+    feedFee = _feedFee;
   }
 
   function mintAQLF(uint256 _amount) public payable {
@@ -59,6 +72,7 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
 
     for (uint256 i; i < _amount; i++) {
       _safeMint(msg.sender, _supply + i + 1);
+      battlesLeft[_supply + i + 1] = 5; // all AQLFs start fed.
     }
   }
 
@@ -98,4 +112,30 @@ contract AquariumLifeForm is ERC721Enumerable, Ownable {
   function withdraw(address _to) public onlyOwner {
     payable(_to).transfer(address(this).balance);
   }
+
+  /**
+   * @notice sender must have approved allowance of PLANK to this address
+   * @param _id the id of the AQLF to feed
+   * @param _amount the amount of plank to feed
+   * @notice example: send 500 PLANK and your AQLF will be able to battle 5 times
+   */
+  function feed(uint256 _id, uint256 _amount) public {
+    require(
+      uint8(_amount) / uint8(feedFee) > 0,
+      'PLANK is not enough for a battle'
+    );
+
+    PLANK.transferFrom(_msgSender(), address(this), _amount);
+
+    battlesLeft[_id] += uint8(_amount) / uint8(feedFee);
+  }
+
+  function aceptBattle(uint256 _id) public { // + off-chain gamble
+    require(battlesLeft[_id] > 0, 'AQLF is not fed');
+
+    PLANK.transferFrom(_msgSender(), address(this), feedFee);
+
+    battlesLeft[_id] -= 1;
+  }
+
 }

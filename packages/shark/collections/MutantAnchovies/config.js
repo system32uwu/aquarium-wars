@@ -24,6 +24,8 @@ const makeConfig = (BUILD_COLLECTION) => {
     MINT_PRICE: 0.1,
     MAX_MINT: 20,
 
+    FEED_FEE: 100,
+
     IMAGES_HEIGHT: 1080,
     IMAGES_WIDTH: 1080,
 
