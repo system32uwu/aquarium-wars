@@ -190,16 +190,20 @@ task(
 
     const baseDir = `${__dirname}/artifacts/contracts`
 
-    const containerDirs = await readdir(baseDir)
+    const containerDirs = await readdir(baseDir) // `currencies` & `NFTS`
 
     for (let dir of containerDirs) {
-      await copy(join(baseDir, dir), abisDir, {
-        overwrite: true,
-        recursive: true,
-        filter: (path) => {
-          return path.indexOf('.dbg.json') === -1 // filter out debug files
-        },
-      }) // copy over to goldfish
+      const targetDir = await readdir(join(baseDir, dir))
+
+      if (targetDir.length) {
+        await copy(join(baseDir, dir, targetDir[0]), abisDir, {
+          overwrite: true,
+          recursive: true,
+          filter: (path) => {
+            return path.indexOf('.dbg.json') === -1 // filter out debug files
+          },
+        }) // copy over to goldfish
+      }
     }
   }
 )
