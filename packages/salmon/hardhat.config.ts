@@ -4,6 +4,7 @@ import '@nomiclabs/hardhat-waffle'
 import '@typechain/hardhat'
 import 'hardhat-gas-reporter'
 import 'solidity-coverage'
+import 'hardhat-abi-exporter'
 
 import { writeFile, mkdirp, readdir, copy } from 'fs-extra'
 import { parseUnits } from '@ethersproject/units'
@@ -182,32 +183,6 @@ task('deploy-nft', 'Deploys a new NFT collection')
     }
   )
 
-task(
-  'compile',
-  'Compiles smart contracts and copies ABIs of contracts over to goldfish',
-  async (_, __, runSuper) => {
-    await runSuper() // compile
-
-    const baseDir = `${__dirname}/artifacts/contracts`
-
-    const containerDirs = await readdir(baseDir) // `currencies` & `NFTS`
-
-    for (let dir of containerDirs) {
-      const targetDir = await readdir(join(baseDir, dir))
-
-      if (targetDir.length) {
-        await copy(join(baseDir, dir, targetDir[0]), abisDir, {
-          overwrite: true,
-          recursive: true,
-          filter: (path) => {
-            return path.indexOf('.dbg.json') === -1 // filter out debug files
-          },
-        }) // copy over to goldfish
-      }
-    }
-  }
-)
-
 const config: HardhatUserConfig = {
   solidity: '0.8.4',
   networks: {
@@ -228,6 +203,15 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
+  },
+  abiExporter: {
+    path: abisDir,
+    runOnCompile: true,
+    clear: true,
+    flat: true,
+    spacing: 2,
+    pretty: true,
+    except: ['@openzeppelin'],
   },
 }
 

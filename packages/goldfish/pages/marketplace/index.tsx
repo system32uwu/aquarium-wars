@@ -26,7 +26,7 @@ const Index: React.FC<IProps> = ({ collections }) => {
                                 {c.name} ({c.symbol})
                             </h2>
                             <Box pb={4}>
-                                <MintCollection collectionData={c} abi={AQLF.abi} />
+                                <MintCollection collectionData={c} abi={AQLF} />
                             </Box>
                         </Box>
                     ))}

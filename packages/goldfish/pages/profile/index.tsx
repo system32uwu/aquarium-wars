@@ -85,7 +85,7 @@ const Profile: React.FC<IProps> = ({ collections }) => {
                     {c.name} ({c.symbol})
                   </h2>
                   <Box pb={4}>
-                    <NFTCollection collectionData={c} abi={AQLF.abi} />
+                    <NFTCollection collectionData={c} abi={AQLF} />
                   </Box>
                 </Box>
               ))}
